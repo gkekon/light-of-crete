@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Light of Crete | Private Photoshoots in Crete</title>
+    <meta
+      name="description"
+      content="Book a natural, elegant and cinematic photoshoot in Crete for couples, families, solo travelers, maternity, groups and private experiences. Photo and video options available."
+    />
+    <meta
+      name="keywords"
+      content="photoshoots in Crete, private photoshoot Crete, couple photoshoot Crete, family photoshoot Crete, solo traveler photoshoot Crete, maternity photoshoot Crete, boudoir photoshoot Crete, vacation photographer Crete, proposal photographer Crete, photo and video Crete"
+    />
+    <meta property="og:title" content="Light of Crete | Private Photoshoots in Crete" />
+    <meta
+      property="og:description"
+      content="Natural, elegant and cinematic photography experiences across Crete, with optional video coverage."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/images/hero-couples.webp" />
+    <meta name="theme-color" content="#F8F5EF" />
+  </head>
+  <body>
+    <form
+      name="photoshoot-request"
+      method="POST"
+      data-netlify="true"
+      netlify-honeypot="bot-field"
+      hidden
+    >
+      <input type="hidden" name="form-name" value="photoshoot-request" />
+      <input name="name" />
+      <input name="email" />
+      <input name="whatsapp" />
+      <select name="photoshootType"></select>
+      <select name="service"></select>
+      <input name="preferredDate" />
+      <input name="location" />
+      <input name="people" />
+      <textarea name="message"></textarea>
+    </form>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

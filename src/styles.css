@@ -1,0 +1,295 @@
+@import "tailwindcss";
+
+:root {
+  --font-sans: "Avenir Next", "SF Pro Display", "Inter", system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "Avenir Next", "SF Pro Display", "Inter", system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #222222;
+  background: #f8f5ef;
+  font-family: var(--font-sans);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+  overflow-x: hidden;
+  background:
+    linear-gradient(180deg, rgba(248, 245, 239, 0.94), rgba(232, 220, 200, 0.42)),
+    #f8f5ef;
+  font-weight: 400;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+::selection {
+  background: rgba(184, 155, 100, 0.32);
+}
+
+.site-header-bar {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(248, 245, 239, 0.1);
+  box-shadow: 0 14px 44px rgba(8, 8, 8, 0.08);
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
+}
+
+.site-mobile-menu {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.brand-anchor {
+  display: inline-flex;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.brand-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.74rem;
+}
+
+.logo-mark {
+  width: 2.28rem;
+  height: 2.28rem;
+  flex: 0 0 auto;
+  color: #c3a36a;
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.18));
+}
+
+.brand-copy {
+  display: grid;
+  gap: 0.38rem;
+}
+
+.brand-wordmark {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(1.52rem, 2.45vw, 1.9rem);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: 0;
+  text-shadow: 0 1px 16px rgba(0, 0, 0, 0.16);
+}
+
+.brand-subtitle {
+  display: block;
+  font-size: 0.58rem;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.58);
+}
+
+.header-nav-link {
+  position: relative;
+  padding-block: 0.5rem;
+  color: inherit;
+  text-transform: uppercase;
+  transition:
+    color 180ms ease,
+    opacity 180ms ease;
+}
+
+.header-nav-link::after {
+  position: absolute;
+  right: 0;
+  bottom: 0.2rem;
+  left: 0;
+  height: 1px;
+  content: "";
+  background: rgba(255, 255, 255, 0.72);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 220ms ease;
+}
+
+.header-nav-link:hover,
+.header-nav-link:focus-visible {
+  color: rgba(255, 255, 255, 0.98);
+}
+
+.header-nav-link:hover::after,
+.header-nav-link:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.whatsapp-header-link:hover,
+.whatsapp-header-link:focus-visible {
+  border-color: rgba(37, 211, 102, 0.42);
+  background: rgba(37, 211, 102, 0.2);
+  color: #ffffff;
+}
+
+.eyebrow {
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.section-heading {
+  font-family: var(--font-display);
+  font-size: clamp(2.55rem, 5vw, 3.35rem);
+  font-weight: 500;
+  line-height: 1.04;
+  letter-spacing: 0;
+}
+
+.section-copy {
+  font-size: clamp(1.05rem, 2vw, 1.16rem);
+  font-weight: 400;
+  line-height: 1.75;
+}
+
+.hero-copy {
+  position: relative;
+}
+
+.hero-brand-lockup {
+  position: relative;
+  display: block;
+  width: fit-content;
+}
+
+.hero-logo-mark {
+  position: absolute;
+  top: 50%;
+  right: calc(100% + clamp(1.2rem, 2.2vw, 2rem));
+  width: clamp(3rem, 7vw, 5.1rem);
+  height: clamp(3rem, 7vw, 5.1rem);
+  color: #c3a36a;
+  filter: drop-shadow(0 16px 34px rgba(0, 0, 0, 0.26));
+  transform: translateY(-48%);
+}
+
+.hero-brand-display {
+  font-family: var(--font-display);
+  font-size: clamp(3.45rem, 8.5vw, 7.2rem);
+  font-weight: 400;
+  line-height: 0.92;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.96);
+  text-shadow: 0 18px 52px rgba(0, 0, 0, 0.28);
+}
+
+.hero-headline {
+  font-family: var(--font-display);
+  font-size: clamp(2.45rem, 5.8vw, 4.65rem);
+  font-weight: 500;
+  line-height: 1.04;
+  letter-spacing: 0;
+}
+
+@media (max-width: 640px) {
+  .logo-mark {
+    width: 2.05rem;
+    height: 2.05rem;
+  }
+
+  .brand-lockup {
+    gap: 0.62rem;
+  }
+
+  .brand-wordmark {
+    font-size: clamp(1.36rem, 7vw, 1.68rem);
+  }
+
+  .brand-subtitle {
+    font-size: 0.55rem;
+  }
+
+  .hero-brand-lockup {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.72rem;
+  }
+
+  .hero-logo-mark {
+    position: static;
+    width: 2.95rem;
+    height: 2.95rem;
+    transform: none;
+  }
+}
+
+.section-shell {
+  width: min(100% - 32px, 1180px);
+  margin-inline: auto;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.masonry {
+  column-count: 1;
+  column-gap: 1rem;
+}
+
+@media (min-width: 700px) {
+  .masonry {
+    column-count: 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .masonry {
+    column-count: 3;
+  }
+}
+
+.masonry-item {
+  break-inside: avoid;
+}
+
+.field {
+  width: 100%;
+  border-radius: 22px;
+  border: 1px solid rgba(74, 81, 64, 0.16);
+  background: rgba(255, 255, 255, 0.76);
+  padding: 15px 18px;
+  color: #222222;
+  outline: none;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease;
+}
+
+.field:focus {
+  border-color: rgba(184, 155, 100, 0.7);
+  background: #ffffff;
+  box-shadow: 0 0 0 5px rgba(184, 155, 100, 0.14);
+}
+
+.field::placeholder {
+  color: rgba(34, 34, 34, 0.48);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
