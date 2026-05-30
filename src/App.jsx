@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import {
   ArrowRight,
   Check,
+  ChevronDown,
   Heart,
   Image,
   MapPin,
@@ -89,6 +90,35 @@ function SectionIntro({ eyebrow, title, children, light = false }) {
         </p>
       )}
     </motion.div>
+  );
+}
+
+function MobileExpandable({
+  children,
+  collapsedHeight = 320,
+  label = 'Explore',
+  tone = 'light',
+}) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  return (
+    <div
+      className={`mobile-expand ${isExpanded ? 'is-expanded' : ''} ${
+        tone === 'dark' ? 'mobile-expand-dark' : ''
+      }`}
+      style={{ '--collapsed-height': `${collapsedHeight}px` }}
+    >
+      <div className="mobile-expand-content">{children}</div>
+      <button
+        type="button"
+        className="mobile-expand-toggle"
+        aria-expanded={isExpanded}
+        onClick={() => setIsExpanded((current) => !current)}
+      >
+        <span>{isExpanded ? 'Close' : label}</span>
+        <ChevronDown size={18} aria-hidden="true" />
+      </button>
+    </div>
   );
 }
 
@@ -394,28 +424,30 @@ function PhotoVideo() {
           {photoVideoSection.text}
         </SectionIntro>
 
-        <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {photoVideoSection.features.map((card, index) => {
-            const Icon = iconRegistry[card.icon] ?? Sparkles;
-            return (
-              <motion.article
-              key={card.id}
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: '-80px' }}
-                transition={{ duration: 0.6, delay: index * 0.06 }}
-                className="rounded-[28px] border border-white/14 bg-white/9 p-6 backdrop-blur-md"
-              >
-                <div className="mb-7 grid h-12 w-12 place-items-center rounded-full bg-white/14">
-                  <Icon size={22} aria-hidden="true" />
-                </div>
-                <h3 className="text-xl font-medium">{card.title}</h3>
-                <p className="mt-4 leading-7 text-white/72">{card.text}</p>
-              </motion.article>
-            );
-          })}
-        </div>
+        <MobileExpandable collapsedHeight={230} tone="dark">
+          <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {photoVideoSection.features.map((card, index) => {
+              const Icon = iconRegistry[card.icon] ?? Sparkles;
+              return (
+                <motion.article
+                key={card.id}
+                  variants={fadeUp}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: '-80px' }}
+                  transition={{ duration: 0.6, delay: index * 0.06 }}
+                  className="rounded-[28px] border border-white/14 bg-white/9 p-6 backdrop-blur-md"
+                >
+                  <div className="mb-7 grid h-12 w-12 place-items-center rounded-full bg-white/14">
+                    <Icon size={22} aria-hidden="true" />
+                  </div>
+                  <h3 className="text-xl font-medium">{card.title}</h3>
+                  <p className="mt-4 leading-7 text-white/72">{card.text}</p>
+                </motion.article>
+              );
+            })}
+          </div>
+        </MobileExpandable>
       </div>
     </section>
   );
@@ -427,23 +459,25 @@ function Locations() {
       <div className="section-shell">
         <SectionIntro title={locationsSection.title}>{locationsSection.text}</SectionIntro>
 
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.7 }}
-          className="mx-auto mt-12 flex max-w-4xl flex-wrap justify-center gap-3"
-        >
-          {locationsSection.chips.map((location) => (
-            <span
-              key={location}
-              className="rounded-full border border-[#4A5140]/10 bg-white/70 px-5 py-3 text-sm font-semibold text-[#4A5140] shadow-[0_12px_38px_rgba(74,81,64,0.08)]"
-            >
-              {location}
-            </span>
-          ))}
-        </motion.div>
+        <MobileExpandable collapsedHeight={190}>
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.7 }}
+            className="mx-auto mt-12 flex max-w-4xl flex-wrap justify-center gap-3"
+          >
+            {locationsSection.chips.map((location) => (
+              <span
+                key={location}
+                className="rounded-full border border-[#4A5140]/10 bg-white/70 px-5 py-3 text-sm font-semibold text-[#4A5140] shadow-[0_12px_38px_rgba(74,81,64,0.08)]"
+              >
+                {location}
+              </span>
+            ))}
+          </motion.div>
+        </MobileExpandable>
       </div>
     </section>
   );
@@ -489,33 +523,35 @@ function Options() {
     <section className="bg-[#F8F5EF] px-4 py-24 sm:py-32">
       <div className="section-shell">
         <SectionIntro title={packagesSection.title} />
-        <div className="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {packagesSection.packages.map((option, index) => (
-            <motion.article
-              key={option.id}
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-80px' }}
-              transition={{ duration: 0.62, delay: index * 0.06 }}
-              className="rounded-[28px] border border-[#4A5140]/10 bg-white/76 p-6 shadow-[0_18px_58px_rgba(74,81,64,0.08)]"
-            >
-              <div className="mb-6 grid h-11 w-11 place-items-center rounded-full bg-[#E8DCC8] text-[#4A5140]">
-                <Image size={20} aria-hidden="true" />
-              </div>
-              <h3 className="text-xl font-medium text-[#222222]">{option.title}</h3>
-              <p className="mt-3 min-h-20 leading-7 text-[#4A5140]">{option.text}</p>
-              <ul className="mt-6 space-y-3">
-                {option.points.map((point) => (
-                  <li key={point} className="flex gap-3 text-sm leading-6 text-[#222222]/72">
-                    <Check className="mt-0.5 shrink-0 text-[#B89B64]" size={17} aria-hidden="true" />
-                    <span>{point}</span>
-                  </li>
-                ))}
-              </ul>
-            </motion.article>
-          ))}
-        </div>
+        <MobileExpandable collapsedHeight={520}>
+          <div className="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {packagesSection.packages.map((option, index) => (
+              <motion.article
+                key={option.id}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.62, delay: index * 0.06 }}
+                className="rounded-[28px] border border-[#4A5140]/10 bg-white/76 p-6 shadow-[0_18px_58px_rgba(74,81,64,0.08)]"
+              >
+                <div className="mb-6 grid h-11 w-11 place-items-center rounded-full bg-[#E8DCC8] text-[#4A5140]">
+                  <Image size={20} aria-hidden="true" />
+                </div>
+                <h3 className="text-xl font-medium text-[#222222]">{option.title}</h3>
+                <p className="mt-3 min-h-20 leading-7 text-[#4A5140]">{option.text}</p>
+                <ul className="mt-6 space-y-3">
+                  {option.points.map((point) => (
+                    <li key={point} className="flex gap-3 text-sm leading-6 text-[#222222]/72">
+                      <Check className="mt-0.5 shrink-0 text-[#B89B64]" size={17} aria-hidden="true" />
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
+              </motion.article>
+            ))}
+          </div>
+        </MobileExpandable>
       </div>
     </section>
   );
