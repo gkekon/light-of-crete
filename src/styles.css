@@ -50,6 +50,7 @@ select {
   overflow: hidden;
   color: #292722;
   background: #f4efe6;
+  animation: introCanvasFadeIn 1.25s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .brand-intro-scene {
@@ -93,6 +94,7 @@ select {
       transparent 1px 7px
     );
   opacity: 0.7;
+  animation: introPaperBreathe 6.2s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .brand-intro-scene::after {
@@ -115,31 +117,32 @@ select {
 
 .intro-sun {
   position: absolute;
-  top: -22vh;
-  left: -58vw;
-  width: 156vw;
-  height: 72vh;
-  border-radius: 42% 58% 64% 36% / 45% 45% 55% 55%;
+  z-index: 3;
+  top: -12vh;
+  left: -62vw;
+  width: 168vw;
+  height: 74vh;
+  border-radius: 46% 54% 62% 38% / 42% 48% 52% 58%;
   background:
     linear-gradient(
-      103deg,
-      rgba(255, 251, 234, 0) 8%,
-      rgba(255, 250, 226, 0.28) 29%,
-      rgba(255, 244, 207, 0.64) 43%,
-      rgba(255, 232, 176, 0.32) 57%,
-      rgba(255, 232, 176, 0) 78%
+      104deg,
+      rgba(255, 222, 170, 0) 4%,
+      rgba(255, 222, 170, 0.14) 23%,
+      rgba(255, 222, 170, 0.36) 40%,
+      rgba(255, 238, 203, 0.28) 58%,
+      rgba(255, 222, 170, 0) 80%
     ),
     radial-gradient(
-      ellipse at 48% 58%,
-      rgba(255, 246, 216, 0.54),
-      rgba(255, 226, 166, 0.16) 43%,
+      ellipse at 48% 56%,
+      rgba(255, 232, 188, 0.34),
+      rgba(255, 222, 170, 0.15) 44%,
       rgba(255, 226, 166, 0) 72%
     );
-  filter: blur(34px);
-  opacity: 0.68;
-  mix-blend-mode: soft-light;
+  filter: blur(30px);
+  opacity: 0.72;
+  mix-blend-mode: screen;
   will-change: transform, opacity;
-  animation: introSunWash 4.15s cubic-bezier(0.43, 0, 0.23, 1) both;
+  animation: introSunWash 6.2s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .intro-sun::after {
@@ -149,10 +152,58 @@ select {
   background: linear-gradient(
     105deg,
     rgba(255, 255, 255, 0),
-    rgba(255, 255, 255, 0.36),
+    rgba(255, 236, 196, 0.22),
     rgba(255, 255, 255, 0)
   );
-  filter: blur(28px);
+  filter: blur(34px);
+}
+
+.intro-leaf-shadows {
+  position: absolute;
+  inset: -12vh -18vw;
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0;
+  filter: blur(10px);
+  mix-blend-mode: multiply;
+  transform-origin: center;
+  will-change: transform, opacity, filter;
+  animation: introLeafFilm 6.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.intro-leaf-shadows svg {
+  width: 134vw;
+  height: 124vh;
+  overflow: visible;
+}
+
+.intro-leaf-shadows path,
+.intro-leaf-shadows ellipse {
+  fill: rgba(58, 48, 37, 0.18);
+  stroke: rgba(58, 48, 37, 0.13);
+  stroke-width: 10;
+  stroke-linecap: round;
+}
+
+.intro-leaf-shadows path {
+  fill: none;
+  stroke-width: 12;
+}
+
+.leaf-branch {
+  transform-origin: center;
+}
+
+.leaf-branch-one {
+  opacity: 0.72;
+}
+
+.leaf-branch-two {
+  opacity: 0.58;
+}
+
+.leaf-branch-three {
+  opacity: 0.46;
 }
 
 .intro-shadow {
@@ -229,7 +280,7 @@ select {
 
 .brand-intro-lockup {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   display: grid;
   justify-items: center;
   width: min(82vw, 47rem);
@@ -526,36 +577,135 @@ select {
 
 @keyframes introSunWash {
   from {
-    opacity: 0.28;
+    opacity: 0;
     transform: translate3d(
-        calc(-16vw + var(--intro-parallax-x)),
-        calc(-2vh + var(--intro-parallax-y)),
+        calc(-24vw + var(--intro-parallax-x)),
+        calc(-4vh + var(--intro-parallax-y)),
         0
       )
-      rotate(-7deg)
-      scale(0.96);
+      rotate(-8deg)
+      scale(0.92, 0.88);
   }
 
-  46% {
-    opacity: 0.72;
+  14% {
+    opacity: 0.34;
+  }
+
+  44% {
+    opacity: 0.78;
     transform: translate3d(
-        calc(33vw + var(--intro-parallax-x)),
-        calc(3vh + var(--intro-parallax-y)),
+        calc(28vw + var(--intro-parallax-x)),
+        calc(1.5vh + var(--intro-parallax-y)),
         0
       )
       rotate(-5deg)
-      scale(1.03);
+      scale(1.04, 0.96);
+  }
+
+  72% {
+    opacity: 0.58;
+    transform: translate3d(
+        calc(58vw + var(--intro-parallax-x)),
+        calc(5vh + var(--intro-parallax-y)),
+        0
+      )
+      rotate(-4deg)
+      scale(1.08, 1);
   }
 
   to {
-    opacity: 0.34;
+    opacity: 0.12;
     transform: translate3d(
-        calc(78vw + var(--intro-parallax-x)),
+        calc(94vw + var(--intro-parallax-x)),
         calc(8vh + var(--intro-parallax-y)),
         0
       )
       rotate(-3deg)
-      scale(1.08);
+      scale(1.12, 1.05);
+  }
+}
+
+@keyframes introLeafFilm {
+  from {
+    opacity: 0;
+    filter: blur(18px);
+    transform: translate3d(
+        calc(-22vw + var(--intro-parallax-x-reverse)),
+        calc(-4vh + var(--intro-parallax-y-reverse)),
+        0
+      )
+      rotate(-8deg)
+      scale(1.06);
+  }
+
+  16% {
+    opacity: 0.12;
+    filter: blur(15px);
+  }
+
+  44% {
+    opacity: 0.23;
+    filter: blur(9px);
+    transform: translate3d(
+        calc(8vw + var(--intro-parallax-x-reverse)),
+        calc(2vh + var(--intro-parallax-y-reverse)),
+        0
+      )
+      rotate(-5deg)
+      scale(1.1);
+  }
+
+  72% {
+    opacity: 0.18;
+    filter: blur(12px);
+    transform: translate3d(
+        calc(34vw + var(--intro-parallax-x-reverse)),
+        calc(5vh + var(--intro-parallax-y-reverse)),
+        0
+      )
+      rotate(-2deg)
+      scale(1.14);
+  }
+
+  to {
+    opacity: 0.06;
+    filter: blur(18px);
+    transform: translate3d(
+        calc(62vw + var(--intro-parallax-x-reverse)),
+        calc(8vh + var(--intro-parallax-y-reverse)),
+        0
+      )
+      rotate(1deg)
+      scale(1.18);
+  }
+}
+
+@keyframes introCanvasFadeIn {
+  from {
+    opacity: 0;
+    filter: brightness(1.08) blur(7px);
+  }
+
+  to {
+    opacity: 1;
+    filter: brightness(1) blur(0);
+  }
+}
+
+@keyframes introPaperBreathe {
+  from {
+    opacity: 0.62;
+    filter: brightness(0.98) saturate(0.98);
+  }
+
+  54% {
+    opacity: 0.76;
+    filter: brightness(1.04) saturate(1.02);
+  }
+
+  to {
+    opacity: 0.66;
+    filter: brightness(1) saturate(1);
   }
 }
 

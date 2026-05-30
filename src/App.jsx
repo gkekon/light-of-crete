@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   ArrowRight,
@@ -196,38 +196,35 @@ function shouldShowBrandIntro() {
   }
 
   try {
-    return window.localStorage.getItem(siteConfig.intro.storageKey) !== 'true';
+    return window.sessionStorage.getItem(siteConfig.intro.storageKey) !== 'true';
   } catch {
     return true;
   }
 }
 
 function BrandIntro({ onComplete }) {
+  const completeIntro = useCallback(() => {
+    try {
+      window.sessionStorage.setItem(siteConfig.intro.storageKey, 'true');
+    } catch {
+      // Ignore storage failures; the intro can simply play again.
+    }
+    onComplete();
+  }, [onComplete]);
+
   useEffect(() => {
     document.body.classList.add('intro-lock');
 
-    const timer = window.setTimeout(() => {
-      try {
-        window.localStorage.setItem(siteConfig.intro.storageKey, 'true');
-      } catch {
-        // Ignore storage failures; the intro can simply play again.
-      }
-      onComplete();
-    }, siteConfig.intro.durationMs);
+    const timer = window.setTimeout(completeIntro, siteConfig.intro.transitionStartMs);
 
     return () => {
       window.clearTimeout(timer);
       document.body.classList.remove('intro-lock');
     };
-  }, [onComplete]);
+  }, [completeIntro]);
 
   const skipIntro = () => {
-    try {
-      window.localStorage.setItem(siteConfig.intro.storageKey, 'true');
-    } catch {
-      // Ignore storage failures; this is only a preference.
-    }
-    onComplete();
+    completeIntro();
   };
 
   const handlePointerMove = (event) => {
@@ -256,7 +253,7 @@ function BrandIntro({ onComplete }) {
       initial={{ opacity: 1 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 1.05, ease: [0.65, 0, 0.35, 1] }}
+      transition={{ duration: 1.65, ease: [0.22, 1, 0.36, 1] }}
       aria-label={`${siteConfig.brandName} intro`}
     >
       <div
@@ -265,15 +262,43 @@ function BrandIntro({ onComplete }) {
         onPointerLeave={resetPointer}
       >
         <div className="intro-sun" />
-        <div className="intro-shadow intro-shadow-one" />
-        <div className="intro-shadow intro-shadow-two" />
-        <div className="intro-shadow intro-shadow-three" />
+        <div className="intro-leaf-shadows" aria-hidden="true">
+          <svg viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice">
+            <g className="leaf-branch leaf-branch-one">
+              <path d="M44 84 C190 146 276 220 390 332" />
+              <ellipse cx="96" cy="118" rx="44" ry="18" transform="rotate(28 96 118)" />
+              <ellipse cx="164" cy="156" rx="56" ry="22" transform="rotate(-18 164 156)" />
+              <ellipse cx="236" cy="204" rx="48" ry="18" transform="rotate(31 236 204)" />
+              <ellipse cx="316" cy="272" rx="62" ry="23" transform="rotate(-14 316 272)" />
+              <ellipse cx="372" cy="326" rx="42" ry="17" transform="rotate(28 372 326)" />
+            </g>
+            <g className="leaf-branch leaf-branch-two">
+              <path d="M130 502 C278 430 418 392 612 360" />
+              <ellipse cx="214" cy="458" rx="52" ry="20" transform="rotate(-34 214 458)" />
+              <ellipse cx="314" cy="421" rx="66" ry="24" transform="rotate(20 314 421)" />
+              <ellipse cx="438" cy="390" rx="58" ry="20" transform="rotate(-21 438 390)" />
+              <ellipse cx="552" cy="368" rx="46" ry="18" transform="rotate(28 552 368)" />
+            </g>
+            <g className="leaf-branch leaf-branch-three">
+              <path d="M742 126 C852 190 932 260 1066 338" />
+              <ellipse cx="790" cy="160" rx="44" ry="18" transform="rotate(34 790 160)" />
+              <ellipse cx="870" cy="214" rx="58" ry="22" transform="rotate(-16 870 214)" />
+              <ellipse cx="960" cy="280" rx="50" ry="19" transform="rotate(24 960 280)" />
+              <ellipse cx="1040" cy="330" rx="44" ry="17" transform="rotate(-20 1040 330)" />
+            </g>
+          </svg>
+        </div>
 
         <motion.div
           className="brand-intro-lockup"
-          initial={{ opacity: 0, y: 18, scale: 0.985 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 1.05, delay: 0.42, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ opacity: 0, y: 14, scale: 0.99, filter: 'blur(5px)' }}
+          animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+          transition={{
+            opacity: { duration: 1.15, delay: 0.28, ease: [0.22, 1, 0.36, 1] },
+            y: { duration: 1.45, delay: 0.28, ease: [0.22, 1, 0.36, 1] },
+            scale: { duration: 1.45, delay: 0.28, ease: [0.22, 1, 0.36, 1] },
+            filter: { duration: 1.35, delay: 0.28, ease: [0.22, 1, 0.36, 1] },
+          }}
         >
           <LogoMark className="intro-logo-mark" />
           <h1>{siteConfig.brandName}</h1>
@@ -870,26 +895,32 @@ export default function App() {
       <AnimatePresence>
         {showIntro && <BrandIntro onComplete={() => setShowIntro(false)} />}
       </AnimatePresence>
-      <Header />
-      <main>
-        <Hero />
-        <Intro />
-        <Categories />
-        <PhotoVideo />
-        <Locations />
-        <Gallery />
-        <Options />
-        <About />
-        <Contact />
-      </main>
-      <Footer />
-      <a
-        href={whatsAppUrl}
-        className="fixed bottom-5 right-5 z-50 grid h-14 w-14 place-items-center rounded-full bg-[#25D366] text-white shadow-[0_18px_50px_rgba(37,211,102,0.34)] transition hover:scale-105 focus:outline-none focus-visible:ring-4 focus-visible:ring-[#25D366]/30"
-        aria-label={siteConfig.floatingWhatsappLabel}
+      <motion.div
+        initial={false}
+        animate={showIntro ? { opacity: 0, y: 12 } : { opacity: 1, y: 0 }}
+        transition={{ duration: 1.55, ease: [0.22, 1, 0.36, 1] }}
       >
-        <MessageCircle size={25} aria-hidden="true" />
-      </a>
+        <Header />
+        <main>
+          <Hero />
+          <Intro />
+          <Categories />
+          <PhotoVideo />
+          <Locations />
+          <Gallery />
+          <Options />
+          <About />
+          <Contact />
+        </main>
+        <Footer />
+        <a
+          href={whatsAppUrl}
+          className="fixed bottom-5 right-5 z-50 grid h-14 w-14 place-items-center rounded-full bg-[#25D366] text-white shadow-[0_18px_50px_rgba(37,211,102,0.34)] transition hover:scale-105 focus:outline-none focus-visible:ring-4 focus-visible:ring-[#25D366]/30"
+          aria-label={siteConfig.floatingWhatsappLabel}
+        >
+          <MessageCircle size={25} aria-hidden="true" />
+        </a>
+      </motion.div>
     </>
   );
 }
