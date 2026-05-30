@@ -115,23 +115,44 @@ select {
 
 .intro-sun {
   position: absolute;
-  top: -31%;
-  left: -23%;
-  width: clamp(28rem, 72vw, 68rem);
-  aspect-ratio: 1;
-  border-radius: 999px;
-  background: radial-gradient(
-    circle,
-    rgba(255, 250, 226, 0.96),
-    rgba(255, 226, 164, 0.58) 31%,
-    rgba(230, 172, 86, 0.2) 54%,
-    rgba(230, 172, 86, 0) 72%
-  );
-  filter: blur(12px);
-  opacity: 0.72;
-  mix-blend-mode: screen;
+  top: -22vh;
+  left: -58vw;
+  width: 156vw;
+  height: 72vh;
+  border-radius: 42% 58% 64% 36% / 45% 45% 55% 55%;
+  background:
+    linear-gradient(
+      103deg,
+      rgba(255, 251, 234, 0) 8%,
+      rgba(255, 250, 226, 0.28) 29%,
+      rgba(255, 244, 207, 0.64) 43%,
+      rgba(255, 232, 176, 0.32) 57%,
+      rgba(255, 232, 176, 0) 78%
+    ),
+    radial-gradient(
+      ellipse at 48% 58%,
+      rgba(255, 246, 216, 0.54),
+      rgba(255, 226, 166, 0.16) 43%,
+      rgba(255, 226, 166, 0) 72%
+    );
+  filter: blur(34px);
+  opacity: 0.68;
+  mix-blend-mode: soft-light;
   will-change: transform, opacity;
-  animation: introSunDrift 4.15s cubic-bezier(0.43, 0, 0.23, 1) both;
+  animation: introSunWash 4.15s cubic-bezier(0.43, 0, 0.23, 1) both;
+}
+
+.intro-sun::after {
+  position: absolute;
+  inset: 24% 12% 22%;
+  content: "";
+  background: linear-gradient(
+    105deg,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0.36),
+    rgba(255, 255, 255, 0)
+  );
+  filter: blur(28px);
 }
 
 .intro-shadow {
@@ -139,15 +160,18 @@ select {
   pointer-events: none;
   filter: blur(13px);
   mix-blend-mode: multiply;
-  opacity: 0.62;
   transform-origin: center;
   will-change: transform;
-  animation: introLeafDrift 3.9s ease-in-out both;
+  animation: introLeafCast 4.15s cubic-bezier(0.43, 0, 0.23, 1) both;
 }
 
 .intro-shadow-one {
   --intro-shadow-rotate: -13deg;
+  --intro-shadow-rotate-mid: -10deg;
   --intro-shadow-rotate-end: -8deg;
+  --intro-shadow-opacity-start: 0.26;
+  --intro-shadow-opacity-mid: 0.62;
+  --intro-shadow-opacity-end: 0.38;
   top: -12%;
   left: -9%;
   width: min(58vw, 52rem);
@@ -165,7 +189,11 @@ select {
 
 .intro-shadow-two {
   --intro-shadow-rotate: 8deg;
+  --intro-shadow-rotate-mid: 10deg;
   --intro-shadow-rotate-end: 13deg;
+  --intro-shadow-opacity-start: 0.18;
+  --intro-shadow-opacity-mid: 0.46;
+  --intro-shadow-opacity-end: 0.3;
   top: 13%;
   left: -2%;
   width: min(38vw, 34rem);
@@ -175,14 +203,17 @@ select {
     radial-gradient(ellipse at 44% 30%, rgba(72, 59, 43, 0.14) 0 11%, transparent 24%),
     radial-gradient(ellipse at 68% 12%, rgba(72, 59, 43, 0.11) 0 8%, transparent 18%),
     radial-gradient(ellipse at 76% 54%, rgba(72, 59, 43, 0.1) 0 12%, transparent 26%);
-  opacity: 0.44;
   transform: rotate(8deg);
   animation-delay: 0.12s;
 }
 
 .intro-shadow-three {
   --intro-shadow-rotate: -7deg;
+  --intro-shadow-rotate-mid: -5deg;
   --intro-shadow-rotate-end: -2deg;
+  --intro-shadow-opacity-start: 0.14;
+  --intro-shadow-opacity-mid: 0.34;
+  --intro-shadow-opacity-end: 0.24;
   right: -2%;
   bottom: 0;
   width: min(36vw, 34rem);
@@ -192,7 +223,6 @@ select {
     radial-gradient(ellipse at 54% 48%, rgba(72, 59, 43, 0.14) 0 12%, transparent 25%),
     radial-gradient(ellipse at 78% 28%, rgba(72, 59, 43, 0.1) 0 10%, transparent 22%),
     linear-gradient(166deg, transparent 8%, rgba(72, 59, 43, 0.1), transparent 70%);
-  opacity: 0.36;
   transform: rotate(-7deg);
   animation-delay: 0.2s;
 }
@@ -494,57 +524,76 @@ select {
   }
 }
 
-@keyframes introSunDrift {
+@keyframes introSunWash {
   from {
-    opacity: 0.42;
+    opacity: 0.28;
     transform: translate3d(
-        calc(-8vw + var(--intro-parallax-x)),
-        calc(-5vh + var(--intro-parallax-y)),
+        calc(-16vw + var(--intro-parallax-x)),
+        calc(-2vh + var(--intro-parallax-y)),
         0
       )
-      scale(0.92);
+      rotate(-7deg)
+      scale(0.96);
   }
 
   46% {
-    opacity: 0.88;
+    opacity: 0.72;
     transform: translate3d(
-        calc(34vw + var(--intro-parallax-x)),
-        calc(1vh + var(--intro-parallax-y)),
+        calc(33vw + var(--intro-parallax-x)),
+        calc(3vh + var(--intro-parallax-y)),
         0
       )
+      rotate(-5deg)
       scale(1.03);
   }
 
   to {
-    opacity: 0.5;
+    opacity: 0.34;
     transform: translate3d(
         calc(78vw + var(--intro-parallax-x)),
-        calc(9vh + var(--intro-parallax-y)),
+        calc(8vh + var(--intro-parallax-y)),
         0
       )
-      scale(1.12);
+      rotate(-3deg)
+      scale(1.08);
   }
 }
 
-@keyframes introLeafDrift {
+@keyframes introLeafCast {
   from {
+    opacity: var(--intro-shadow-opacity-start, 0.24);
+    filter: blur(19px);
     transform: translate3d(
-        calc(-3% + var(--intro-parallax-x-reverse)),
-        calc(-2% + var(--intro-parallax-y-reverse)),
+        calc(-4% + var(--intro-parallax-x-reverse)),
+        calc(-1% + var(--intro-parallax-y-reverse)),
         0
       )
       rotate(var(--intro-shadow-rotate, -6deg))
-      scale(1.03);
+      scale(1.06);
+  }
+
+  46% {
+    opacity: var(--intro-shadow-opacity-mid, 0.54);
+    filter: blur(9px);
+    transform: translate3d(
+        calc(2% + var(--intro-parallax-x-reverse)),
+        calc(4% + var(--intro-parallax-y-reverse)),
+        0
+      )
+      rotate(var(--intro-shadow-rotate-mid, -4deg))
+      scale(1.1);
   }
 
   to {
+    opacity: var(--intro-shadow-opacity-end, 0.32);
+    filter: blur(16px);
     transform: translate3d(
-        calc(7% + var(--intro-parallax-x-reverse)),
-        calc(5% + var(--intro-parallax-y-reverse)),
+        calc(9% + var(--intro-parallax-x-reverse)),
+        calc(7% + var(--intro-parallax-y-reverse)),
         0
       )
       rotate(var(--intro-shadow-rotate-end, -3deg))
-      scale(1.12);
+      scale(1.14);
   }
 }
 
