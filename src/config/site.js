@@ -12,8 +12,8 @@ export const siteConfig = {
   successPath: '/success.html',
   intro: {
     enabled: true,
-    transitionStartMs: 4550,
-    storageKey: 'light-of-crete-intro-session-v1',
+    durationMs: 3900,
+    storageKey: 'light-of-crete-intro-seen-v1',
   },
 };
 

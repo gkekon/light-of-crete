@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   ArrowRight,
@@ -196,35 +196,38 @@ function shouldShowBrandIntro() {
   }
 
   try {
-    return window.sessionStorage.getItem(siteConfig.intro.storageKey) !== 'true';
+    return window.localStorage.getItem(siteConfig.intro.storageKey) !== 'true';
   } catch {
     return true;
   }
 }
 
 function BrandIntro({ onComplete }) {
-  const completeIntro = useCallback(() => {
-    try {
-      window.sessionStorage.setItem(siteConfig.intro.storageKey, 'true');
-    } catch {
-      // Ignore storage failures; the intro can simply play again.
-    }
-    onComplete();
-  }, [onComplete]);
-
   useEffect(() => {
     document.body.classList.add('intro-lock');
 
-    const timer = window.setTimeout(completeIntro, siteConfig.intro.transitionStartMs);
+    const timer = window.setTimeout(() => {
+      try {
+        window.localStorage.setItem(siteConfig.intro.storageKey, 'true');
+      } catch {
+        // Ignore storage failures; the intro can simply play again.
+      }
+      onComplete();
+    }, siteConfig.intro.durationMs);
 
     return () => {
       window.clearTimeout(timer);
       document.body.classList.remove('intro-lock');
     };
-  }, [completeIntro]);
+  }, [onComplete]);
 
   const skipIntro = () => {
-    completeIntro();
+    try {
+      window.localStorage.setItem(siteConfig.intro.storageKey, 'true');
+    } catch {
+      // Ignore storage failures; this is only a preference.
+    }
+    onComplete();
   };
 
   const handlePointerMove = (event) => {
@@ -253,7 +256,7 @@ function BrandIntro({ onComplete }) {
       initial={{ opacity: 1 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 1.65, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 1.05, ease: [0.65, 0, 0.35, 1] }}
       aria-label={`${siteConfig.brandName} intro`}
     >
       <div
@@ -268,14 +271,9 @@ function BrandIntro({ onComplete }) {
 
         <motion.div
           className="brand-intro-lockup"
-          initial={{ opacity: 0, y: 16, scale: 0.988, filter: 'blur(8px)' }}
-          animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
-          transition={{
-            opacity: { duration: 1.25, delay: 0.34, ease: [0.22, 1, 0.36, 1] },
-            y: { duration: 1.55, delay: 0.34, ease: [0.22, 1, 0.36, 1] },
-            scale: { duration: 1.55, delay: 0.34, ease: [0.22, 1, 0.36, 1] },
-            filter: { duration: 1.45, delay: 0.34, ease: [0.22, 1, 0.36, 1] },
-          }}
+          initial={{ opacity: 0, y: 18, scale: 0.985 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 1.05, delay: 0.42, ease: [0.22, 1, 0.36, 1] }}
         >
           <LogoMark className="intro-logo-mark" />
           <h1>{siteConfig.brandName}</h1>
@@ -872,32 +870,26 @@ export default function App() {
       <AnimatePresence>
         {showIntro && <BrandIntro onComplete={() => setShowIntro(false)} />}
       </AnimatePresence>
-      <motion.div
-        initial={false}
-        animate={showIntro ? { opacity: 0, y: 12 } : { opacity: 1, y: 0 }}
-        transition={{ duration: 1.55, ease: [0.22, 1, 0.36, 1] }}
+      <Header />
+      <main>
+        <Hero />
+        <Intro />
+        <Categories />
+        <PhotoVideo />
+        <Locations />
+        <Gallery />
+        <Options />
+        <About />
+        <Contact />
+      </main>
+      <Footer />
+      <a
+        href={whatsAppUrl}
+        className="fixed bottom-5 right-5 z-50 grid h-14 w-14 place-items-center rounded-full bg-[#25D366] text-white shadow-[0_18px_50px_rgba(37,211,102,0.34)] transition hover:scale-105 focus:outline-none focus-visible:ring-4 focus-visible:ring-[#25D366]/30"
+        aria-label={siteConfig.floatingWhatsappLabel}
       >
-        <Header />
-        <main>
-          <Hero />
-          <Intro />
-          <Categories />
-          <PhotoVideo />
-          <Locations />
-          <Gallery />
-          <Options />
-          <About />
-          <Contact />
-        </main>
-        <Footer />
-        <a
-          href={whatsAppUrl}
-          className="fixed bottom-5 right-5 z-50 grid h-14 w-14 place-items-center rounded-full bg-[#25D366] text-white shadow-[0_18px_50px_rgba(37,211,102,0.34)] transition hover:scale-105 focus:outline-none focus-visible:ring-4 focus-visible:ring-[#25D366]/30"
-          aria-label={siteConfig.floatingWhatsappLabel}
-        >
-          <MessageCircle size={25} aria-hidden="true" />
-        </a>
-      </motion.div>
+        <MessageCircle size={25} aria-hidden="true" />
+      </a>
     </>
   );
 }
