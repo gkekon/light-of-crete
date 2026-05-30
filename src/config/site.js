@@ -11,7 +11,7 @@ export const siteConfig = {
   formSubject: 'New photoshoot request from Light of Crete',
   successPath: '/success.html',
   intro: {
-    enabled: true,
+    enabled: false,
     transitionStartMs: 4550,
     storageKey: 'light-of-crete-intro-session-v2',
   },
