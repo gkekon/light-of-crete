@@ -230,16 +230,40 @@ function BrandIntro({ onComplete }) {
     onComplete();
   };
 
+  const handlePointerMove = (event) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+    const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+    const parallaxX = Math.max(-1, Math.min(1, x)) * 18;
+    const parallaxY = Math.max(-1, Math.min(1, y)) * 12;
+
+    event.currentTarget.style.setProperty('--intro-parallax-x', `${parallaxX}px`);
+    event.currentTarget.style.setProperty('--intro-parallax-y', `${parallaxY}px`);
+    event.currentTarget.style.setProperty('--intro-parallax-x-reverse', `${-parallaxX}px`);
+    event.currentTarget.style.setProperty('--intro-parallax-y-reverse', `${-parallaxY}px`);
+  };
+
+  const resetPointer = (event) => {
+    event.currentTarget.style.setProperty('--intro-parallax-x', '0px');
+    event.currentTarget.style.setProperty('--intro-parallax-y', '0px');
+    event.currentTarget.style.setProperty('--intro-parallax-x-reverse', '0px');
+    event.currentTarget.style.setProperty('--intro-parallax-y-reverse', '0px');
+  };
+
   return (
     <motion.div
       className="brand-intro"
       initial={{ opacity: 1 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.65, ease: 'easeInOut' }}
+      transition={{ duration: 1.05, ease: [0.65, 0, 0.35, 1] }}
       aria-label={`${siteConfig.brandName} intro`}
     >
-      <div className="brand-intro-scene">
+      <div
+        className="brand-intro-scene"
+        onPointerMove={handlePointerMove}
+        onPointerLeave={resetPointer}
+      >
         <div className="intro-sun" />
         <div className="intro-shadow intro-shadow-one" />
         <div className="intro-shadow intro-shadow-two" />

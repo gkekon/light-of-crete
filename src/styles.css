@@ -53,6 +53,10 @@ select {
 }
 
 .brand-intro-scene {
+  --intro-parallax-x: 0px;
+  --intro-parallax-y: 0px;
+  --intro-parallax-x-reverse: 0px;
+  --intro-parallax-y-reverse: 0px;
   position: relative;
   display: grid;
   min-height: 100vh;
@@ -111,20 +115,23 @@ select {
 
 .intro-sun {
   position: absolute;
-  top: -24%;
-  left: -14%;
-  width: clamp(24rem, 56vw, 54rem);
+  top: -31%;
+  left: -23%;
+  width: clamp(28rem, 72vw, 68rem);
   aspect-ratio: 1;
   border-radius: 999px;
   background: radial-gradient(
     circle,
-    rgba(255, 248, 221, 0.94),
-    rgba(252, 220, 159, 0.52) 34%,
-    rgba(232, 174, 87, 0.18) 56%,
-    rgba(232, 174, 87, 0) 72%
+    rgba(255, 250, 226, 0.96),
+    rgba(255, 226, 164, 0.58) 31%,
+    rgba(230, 172, 86, 0.2) 54%,
+    rgba(230, 172, 86, 0) 72%
   );
-  filter: blur(10px);
-  animation: introSunDrift 3.9s ease-in-out both;
+  filter: blur(12px);
+  opacity: 0.72;
+  mix-blend-mode: screen;
+  will-change: transform, opacity;
+  animation: introSunDrift 4.15s cubic-bezier(0.43, 0, 0.23, 1) both;
 }
 
 .intro-shadow {
@@ -134,6 +141,7 @@ select {
   mix-blend-mode: multiply;
   opacity: 0.62;
   transform-origin: center;
+  will-change: transform;
   animation: introLeafDrift 3.9s ease-in-out both;
 }
 
@@ -488,28 +496,54 @@ select {
 
 @keyframes introSunDrift {
   from {
-    opacity: 0.62;
-    transform: translate3d(-5%, -4%, 0) scale(0.98);
+    opacity: 0.42;
+    transform: translate3d(
+        calc(-8vw + var(--intro-parallax-x)),
+        calc(-5vh + var(--intro-parallax-y)),
+        0
+      )
+      scale(0.92);
   }
 
-  52% {
-    opacity: 0.9;
+  46% {
+    opacity: 0.88;
+    transform: translate3d(
+        calc(34vw + var(--intro-parallax-x)),
+        calc(1vh + var(--intro-parallax-y)),
+        0
+      )
+      scale(1.03);
   }
 
   to {
-    opacity: 0.78;
-    transform: translate3d(12%, 10%, 0) scale(1.08);
+    opacity: 0.5;
+    transform: translate3d(
+        calc(78vw + var(--intro-parallax-x)),
+        calc(9vh + var(--intro-parallax-y)),
+        0
+      )
+      scale(1.12);
   }
 }
 
 @keyframes introLeafDrift {
   from {
-    transform: translate3d(-3%, -2%, 0) rotate(var(--intro-shadow-rotate, -6deg))
+    transform: translate3d(
+        calc(-3% + var(--intro-parallax-x-reverse)),
+        calc(-2% + var(--intro-parallax-y-reverse)),
+        0
+      )
+      rotate(var(--intro-shadow-rotate, -6deg))
       scale(1.03);
   }
 
   to {
-    transform: translate3d(7%, 5%, 0) rotate(var(--intro-shadow-rotate-end, -3deg))
+    transform: translate3d(
+        calc(7% + var(--intro-parallax-x-reverse)),
+        calc(5% + var(--intro-parallax-y-reverse)),
+        0
+      )
+      rotate(var(--intro-shadow-rotate-end, -3deg))
       scale(1.12);
   }
 }
