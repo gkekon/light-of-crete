@@ -50,6 +50,7 @@ select {
   overflow: hidden;
   color: #292722;
   background: #f4efe6;
+  animation: introCanvasFadeIn 1.35s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .brand-intro-scene {
@@ -93,6 +94,7 @@ select {
       transparent 1px 7px
     );
   opacity: 0.7;
+  animation: introPaperBreathe 6.2s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .brand-intro-scene::after {
@@ -115,31 +117,31 @@ select {
 
 .intro-sun {
   position: absolute;
-  top: -22vh;
-  left: -58vw;
-  width: 156vw;
-  height: 72vh;
+  top: -18vh;
+  left: -62vw;
+  width: 168vw;
+  height: 76vh;
   border-radius: 42% 58% 64% 36% / 45% 45% 55% 55%;
   background:
     linear-gradient(
-      103deg,
-      rgba(255, 251, 234, 0) 8%,
-      rgba(255, 250, 226, 0.28) 29%,
-      rgba(255, 244, 207, 0.64) 43%,
-      rgba(255, 232, 176, 0.32) 57%,
-      rgba(255, 232, 176, 0) 78%
+      104deg,
+      rgba(255, 237, 195, 0) 7%,
+      rgba(255, 226, 170, 0.16) 25%,
+      rgba(255, 222, 170, 0.36) 42%,
+      rgba(255, 232, 188, 0.22) 59%,
+      rgba(255, 232, 188, 0) 81%
     ),
     radial-gradient(
-      ellipse at 48% 58%,
-      rgba(255, 246, 216, 0.54),
-      rgba(255, 226, 166, 0.16) 43%,
+      ellipse at 50% 60%,
+      rgba(255, 236, 196, 0.34),
+      rgba(255, 226, 166, 0.12) 46%,
       rgba(255, 226, 166, 0) 72%
     );
-  filter: blur(34px);
-  opacity: 0.68;
+  filter: blur(42px);
+  opacity: 0.58;
   mix-blend-mode: soft-light;
   will-change: transform, opacity;
-  animation: introSunWash 4.15s cubic-bezier(0.43, 0, 0.23, 1) both;
+  animation: introSunWash 6.2s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .intro-sun::after {
@@ -149,10 +151,10 @@ select {
   background: linear-gradient(
     105deg,
     rgba(255, 255, 255, 0),
-    rgba(255, 255, 255, 0.36),
+    rgba(255, 240, 207, 0.24),
     rgba(255, 255, 255, 0)
   );
-  filter: blur(28px);
+  filter: blur(34px);
 }
 
 .intro-shadow {
@@ -162,16 +164,16 @@ select {
   mix-blend-mode: multiply;
   transform-origin: center;
   will-change: transform;
-  animation: introLeafCast 4.15s cubic-bezier(0.43, 0, 0.23, 1) both;
+  animation: introLeafCast 6.2s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .intro-shadow-one {
   --intro-shadow-rotate: -13deg;
   --intro-shadow-rotate-mid: -10deg;
   --intro-shadow-rotate-end: -8deg;
-  --intro-shadow-opacity-start: 0.26;
-  --intro-shadow-opacity-mid: 0.62;
-  --intro-shadow-opacity-end: 0.38;
+  --intro-shadow-opacity-start: 0.1;
+  --intro-shadow-opacity-mid: 0.25;
+  --intro-shadow-opacity-end: 0.14;
   top: -12%;
   left: -9%;
   width: min(58vw, 52rem);
@@ -191,9 +193,9 @@ select {
   --intro-shadow-rotate: 8deg;
   --intro-shadow-rotate-mid: 10deg;
   --intro-shadow-rotate-end: 13deg;
-  --intro-shadow-opacity-start: 0.18;
-  --intro-shadow-opacity-mid: 0.46;
-  --intro-shadow-opacity-end: 0.3;
+  --intro-shadow-opacity-start: 0.08;
+  --intro-shadow-opacity-mid: 0.2;
+  --intro-shadow-opacity-end: 0.12;
   top: 13%;
   left: -2%;
   width: min(38vw, 34rem);
@@ -211,9 +213,9 @@ select {
   --intro-shadow-rotate: -7deg;
   --intro-shadow-rotate-mid: -5deg;
   --intro-shadow-rotate-end: -2deg;
-  --intro-shadow-opacity-start: 0.14;
-  --intro-shadow-opacity-mid: 0.34;
-  --intro-shadow-opacity-end: 0.24;
+  --intro-shadow-opacity-start: 0.06;
+  --intro-shadow-opacity-mid: 0.15;
+  --intro-shadow-opacity-end: 0.1;
   right: -2%;
   bottom: 0;
   width: min(36vw, 34rem);
@@ -225,6 +227,27 @@ select {
     linear-gradient(166deg, transparent 8%, rgba(72, 59, 43, 0.1), transparent 70%);
   transform: rotate(-7deg);
   animation-delay: 0.2s;
+}
+
+.brand-intro-lockup::before {
+  position: absolute;
+  inset: -18% -24%;
+  z-index: 2;
+  content: "";
+  pointer-events: none;
+  background: linear-gradient(
+    104deg,
+    rgba(255, 222, 170, 0),
+    rgba(255, 222, 170, 0.18),
+    rgba(255, 244, 216, 0.28),
+    rgba(255, 222, 170, 0.12),
+    rgba(255, 222, 170, 0)
+  );
+  filter: blur(18px);
+  mix-blend-mode: soft-light;
+  opacity: 0;
+  transform: translate3d(-54%, -8%, 0) rotate(-7deg) scaleX(0.82);
+  animation: introLogoLightReveal 6.2s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .brand-intro-lockup {
@@ -247,7 +270,7 @@ select {
 .intro-logo-mark path {
   stroke-dasharray: 140;
   stroke-dashoffset: 140;
-  animation: introLineReveal 1.25s ease-out 0.52s forwards;
+  animation: introLineReveal 1.65s cubic-bezier(0.22, 1, 0.36, 1) 0.58s forwards;
 }
 
 .brand-intro-lockup h1 {
@@ -526,74 +549,152 @@ select {
 
 @keyframes introSunWash {
   from {
-    opacity: 0.28;
+    opacity: 0.18;
     transform: translate3d(
-        calc(-16vw + var(--intro-parallax-x)),
-        calc(-2vh + var(--intro-parallax-y)),
+        calc(-18vw + var(--intro-parallax-x)),
+        calc(-4vh + var(--intro-parallax-y)),
+        0
+      )
+      rotate(-8deg)
+      scale(0.96, 0.92);
+  }
+
+  24% {
+    opacity: 0.34;
+    transform: translate3d(
+        calc(4vw + var(--intro-parallax-x)),
+        calc(-1vh + var(--intro-parallax-y)),
         0
       )
       rotate(-7deg)
-      scale(0.96);
+      scale(1.02, 0.95);
   }
 
-  46% {
-    opacity: 0.72;
+  58% {
+    opacity: 0.66;
     transform: translate3d(
-        calc(33vw + var(--intro-parallax-x)),
+        calc(38vw + var(--intro-parallax-x)),
         calc(3vh + var(--intro-parallax-y)),
         0
       )
       rotate(-5deg)
-      scale(1.03);
+      scale(1.08, 1);
   }
 
   to {
-    opacity: 0.34;
+    opacity: 0.2;
     transform: translate3d(
-        calc(78vw + var(--intro-parallax-x)),
-        calc(8vh + var(--intro-parallax-y)),
+        calc(88vw + var(--intro-parallax-x)),
+        calc(7vh + var(--intro-parallax-y)),
         0
       )
       rotate(-3deg)
-      scale(1.08);
+      scale(1.12, 1.04);
+  }
+}
+
+@keyframes introCanvasFadeIn {
+  from {
+    opacity: 0;
+    filter: brightness(1.08) blur(8px);
+  }
+
+  to {
+    opacity: 1;
+    filter: brightness(1) blur(0);
   }
 }
 
 @keyframes introLeafCast {
   from {
-    opacity: var(--intro-shadow-opacity-start, 0.24);
-    filter: blur(19px);
+    opacity: var(--intro-shadow-opacity-start, 0.1);
+    filter: blur(20px);
     transform: translate3d(
-        calc(-4% + var(--intro-parallax-x-reverse)),
-        calc(-1% + var(--intro-parallax-y-reverse)),
+        calc(-7% + var(--intro-parallax-x-reverse)),
+        calc(-2% + var(--intro-parallax-y-reverse)),
         0
       )
       rotate(var(--intro-shadow-rotate, -6deg))
-      scale(1.06);
+      scale(1.08);
   }
 
-  46% {
-    opacity: var(--intro-shadow-opacity-mid, 0.54);
-    filter: blur(9px);
+  29% {
+    opacity: calc(var(--intro-shadow-opacity-mid, 0.2) * 0.72);
+    filter: blur(15px);
     transform: translate3d(
-        calc(2% + var(--intro-parallax-x-reverse)),
-        calc(4% + var(--intro-parallax-y-reverse)),
+        calc(-1% + var(--intro-parallax-x-reverse)),
+        calc(2% + var(--intro-parallax-y-reverse)),
         0
       )
       rotate(var(--intro-shadow-rotate-mid, -4deg))
-      scale(1.1);
+      scale(1.12);
+  }
+
+  58% {
+    opacity: var(--intro-shadow-opacity-mid, 0.2);
+    filter: blur(10px);
+    transform: translate3d(
+        calc(5% + var(--intro-parallax-x-reverse)),
+        calc(5% + var(--intro-parallax-y-reverse)),
+        0
+      )
+      rotate(var(--intro-shadow-rotate-mid, -4deg))
+      scale(1.16);
   }
 
   to {
-    opacity: var(--intro-shadow-opacity-end, 0.32);
-    filter: blur(16px);
+    opacity: var(--intro-shadow-opacity-end, 0.12);
+    filter: blur(18px);
     transform: translate3d(
-        calc(9% + var(--intro-parallax-x-reverse)),
-        calc(7% + var(--intro-parallax-y-reverse)),
+        calc(13% + var(--intro-parallax-x-reverse)),
+        calc(8% + var(--intro-parallax-y-reverse)),
         0
       )
       rotate(var(--intro-shadow-rotate-end, -3deg))
-      scale(1.14);
+      scale(1.2);
+  }
+}
+
+@keyframes introLogoLightReveal {
+  0%,
+  12% {
+    opacity: 0;
+    transform: translate3d(-58%, -8%, 0) rotate(-7deg) scaleX(0.82);
+  }
+
+  28% {
+    opacity: 0.34;
+  }
+
+  58% {
+    opacity: 0.72;
+    transform: translate3d(4%, 0, 0) rotate(-5deg) scaleX(1.04);
+  }
+
+  78% {
+    opacity: 0.24;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(58%, 6%, 0) rotate(-3deg) scaleX(0.92);
+  }
+}
+
+@keyframes introPaperBreathe {
+  from {
+    opacity: 0.62;
+    filter: brightness(0.98) saturate(0.98);
+  }
+
+  58% {
+    opacity: 0.74;
+    filter: brightness(1.04) saturate(1.02);
+  }
+
+  to {
+    opacity: 0.66;
+    filter: brightness(1) saturate(1);
   }
 }
 
