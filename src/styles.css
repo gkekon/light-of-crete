@@ -60,97 +60,132 @@ select {
   place-items: center;
   overflow: hidden;
   background:
-    radial-gradient(circle at 18% 16%, rgba(255, 255, 255, 0.84), transparent 22rem),
-    linear-gradient(108deg, rgba(255, 248, 236, 0.95), rgba(230, 216, 192, 0.66)),
-    #f4efe6;
+    radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.9), transparent 22rem),
+    linear-gradient(102deg, #e7d7c2 0%, #f7f0e7 18%, #f1e9dc 68%, #d9c2a4 100%);
+  box-shadow: inset 0 -10rem 18rem rgba(120, 84, 44, 0.1);
 }
 
 .brand-intro-scene::before {
   position: absolute;
-  inset: -6%;
+  inset: 0;
   content: "";
   background:
-    radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.5), transparent 17rem),
+    linear-gradient(
+      90deg,
+      rgba(111, 73, 36, 0.16),
+      rgba(255, 255, 255, 0.08) 14%,
+      rgba(255, 255, 255, 0) 74%,
+      rgba(96, 61, 31, 0.23)
+    ),
+    radial-gradient(circle at 28% 32%, rgba(255, 255, 255, 0.54), transparent 18rem),
     repeating-linear-gradient(
-      86deg,
-      rgba(60, 52, 40, 0.025) 0 1px,
-      transparent 1px 4px
+      88deg,
+      rgba(49, 39, 28, 0.022) 0 1px,
+      transparent 1px 5px
+    ),
+    repeating-linear-gradient(
+      178deg,
+      rgba(49, 39, 28, 0.014) 0 1px,
+      transparent 1px 7px
     );
-  filter: blur(0.25px);
-  opacity: 0.62;
+  opacity: 0.7;
 }
 
 .brand-intro-scene::after {
   position: absolute;
   top: -4%;
-  right: 7%;
+  right: 8%;
   bottom: -6%;
-  width: min(17vw, 12rem);
+  width: min(12vw, 8.5rem);
   content: "";
   background: linear-gradient(
     90deg,
-    rgba(188, 145, 87, 0),
-    rgba(188, 145, 87, 0.18),
-    rgba(91, 60, 31, 0.24)
+    rgba(188, 145, 87, 0.02),
+    rgba(163, 117, 68, 0.22),
+    rgba(83, 53, 28, 0.28)
   );
-  filter: blur(18px);
-  opacity: 0.72;
-  transform: rotate(1.5deg);
+  filter: blur(12px);
+  opacity: 0.62;
+  transform: rotate(0.9deg);
 }
 
 .intro-sun {
   position: absolute;
-  top: -18%;
-  left: -8%;
-  width: clamp(18rem, 42vw, 38rem);
+  top: -24%;
+  left: -14%;
+  width: clamp(24rem, 56vw, 54rem);
   aspect-ratio: 1;
   border-radius: 999px;
   background: radial-gradient(
     circle,
-    rgba(255, 245, 208, 0.92),
-    rgba(235, 188, 110, 0.36) 45%,
-    rgba(235, 188, 110, 0) 68%
+    rgba(255, 248, 221, 0.94),
+    rgba(252, 220, 159, 0.52) 34%,
+    rgba(232, 174, 87, 0.18) 56%,
+    rgba(232, 174, 87, 0) 72%
   );
-  filter: blur(8px);
+  filter: blur(10px);
   animation: introSunDrift 3.9s ease-in-out both;
 }
 
 .intro-shadow {
   position: absolute;
   pointer-events: none;
-  background: rgba(93, 76, 55, 0.2);
-  filter: blur(18px);
+  filter: blur(13px);
   mix-blend-mode: multiply;
-  opacity: 0.55;
+  opacity: 0.62;
   transform-origin: center;
-  animation: introShadowDrift 3.9s ease-in-out both;
+  animation: introLeafDrift 3.9s ease-in-out both;
 }
 
 .intro-shadow-one {
-  top: -6%;
+  --intro-shadow-rotate: -13deg;
+  --intro-shadow-rotate-end: -8deg;
+  top: -12%;
   left: -9%;
-  width: 46vw;
-  height: 22vh;
-  clip-path: polygon(0 0, 100% 12%, 86% 42%, 28% 64%, 0 48%);
+  width: min(58vw, 52rem);
+  height: 52vh;
+  background:
+    radial-gradient(ellipse at 9% 28%, rgba(63, 52, 40, 0.18) 0 8%, transparent 17%),
+    radial-gradient(ellipse at 20% 17%, rgba(63, 52, 40, 0.2) 0 7%, transparent 15%),
+    radial-gradient(ellipse at 34% 34%, rgba(63, 52, 40, 0.2) 0 9%, transparent 18%),
+    radial-gradient(ellipse at 45% 17%, rgba(63, 52, 40, 0.15) 0 8%, transparent 18%),
+    radial-gradient(ellipse at 56% 42%, rgba(63, 52, 40, 0.14) 0 7%, transparent 18%),
+    radial-gradient(ellipse at 72% 22%, rgba(63, 52, 40, 0.12) 0 8%, transparent 19%),
+    linear-gradient(118deg, transparent 8%, rgba(63, 52, 40, 0.11) 40%, transparent 62%);
+  transform: rotate(-13deg);
 }
 
 .intro-shadow-two {
-  top: 12%;
-  left: 5%;
-  width: 30vw;
-  height: 28vh;
-  clip-path: polygon(10% 0, 84% 12%, 100% 54%, 52% 100%, 0 70%);
-  opacity: 0.34;
+  --intro-shadow-rotate: 8deg;
+  --intro-shadow-rotate-end: 13deg;
+  top: 13%;
+  left: -2%;
+  width: min(38vw, 34rem);
+  height: 34vh;
+  background:
+    radial-gradient(ellipse at 20% 18%, rgba(72, 59, 43, 0.18) 0 9%, transparent 20%),
+    radial-gradient(ellipse at 44% 30%, rgba(72, 59, 43, 0.14) 0 11%, transparent 24%),
+    radial-gradient(ellipse at 68% 12%, rgba(72, 59, 43, 0.11) 0 8%, transparent 18%),
+    radial-gradient(ellipse at 76% 54%, rgba(72, 59, 43, 0.1) 0 12%, transparent 26%);
+  opacity: 0.44;
+  transform: rotate(8deg);
   animation-delay: 0.12s;
 }
 
 .intro-shadow-three {
-  right: 4%;
-  bottom: 6%;
-  width: 28vw;
-  height: 18vh;
-  clip-path: polygon(8% 12%, 100% 0, 92% 78%, 0 100%);
-  opacity: 0.22;
+  --intro-shadow-rotate: -7deg;
+  --intro-shadow-rotate-end: -2deg;
+  right: -2%;
+  bottom: 0;
+  width: min(36vw, 34rem);
+  height: 27vh;
+  background:
+    radial-gradient(ellipse at 24% 38%, rgba(72, 59, 43, 0.12) 0 10%, transparent 24%),
+    radial-gradient(ellipse at 54% 48%, rgba(72, 59, 43, 0.14) 0 12%, transparent 25%),
+    radial-gradient(ellipse at 78% 28%, rgba(72, 59, 43, 0.1) 0 10%, transparent 22%),
+    linear-gradient(166deg, transparent 8%, rgba(72, 59, 43, 0.1), transparent 70%);
+  opacity: 0.36;
+  transform: rotate(-7deg);
   animation-delay: 0.2s;
 }
 
@@ -164,10 +199,11 @@ select {
 }
 
 .intro-logo-mark {
-  width: clamp(4.4rem, 9vw, 7.1rem);
-  height: clamp(4.4rem, 9vw, 7.1rem);
-  color: #a9874b;
-  filter: drop-shadow(0 14px 28px rgba(128, 94, 49, 0.12));
+  width: clamp(4.1rem, 8vw, 6.5rem);
+  height: clamp(4.1rem, 8vw, 6.5rem);
+  color: #9c793f;
+  opacity: 0.92;
+  filter: drop-shadow(0 14px 28px rgba(128, 94, 49, 0.08));
 }
 
 .intro-logo-mark path {
@@ -177,13 +213,14 @@ select {
 }
 
 .brand-intro-lockup h1 {
-  margin: clamp(1.6rem, 3vw, 2.3rem) 0 0;
-  font-family: Didot, "Bodoni 72", "Times New Roman", serif;
-  font-size: clamp(3.2rem, 8.3vw, 7rem);
+  margin: clamp(1.55rem, 2.6vw, 2.15rem) 0 0;
+  font-family: "Cormorant Garamond", "Bodoni 72", Didot, "Iowan Old Style",
+    "Palatino Linotype", Georgia, serif;
+  font-size: clamp(3.05rem, 6.6vw, 5.9rem);
   font-weight: 300;
-  line-height: 0.92;
-  letter-spacing: -0.045em;
-  color: rgba(37, 35, 31, 0.88);
+  line-height: 0.94;
+  letter-spacing: -0.025em;
+  color: rgba(45, 42, 37, 0.82);
 }
 
 .intro-divider {
@@ -216,9 +253,9 @@ select {
   margin: 0;
   font-size: clamp(0.72rem, 1.6vw, 1rem);
   font-weight: 500;
-  letter-spacing: 0.52em;
+  letter-spacing: 0.48em;
   text-transform: uppercase;
-  color: rgba(37, 35, 31, 0.72);
+  color: rgba(45, 42, 37, 0.68);
 }
 
 .intro-skip {
@@ -465,13 +502,15 @@ select {
   }
 }
 
-@keyframes introShadowDrift {
+@keyframes introLeafDrift {
   from {
-    transform: translate3d(-4%, -3%, 0) rotate(-5deg) scale(1.05);
+    transform: translate3d(-3%, -2%, 0) rotate(var(--intro-shadow-rotate, -6deg))
+      scale(1.03);
   }
 
   to {
-    transform: translate3d(8%, 5%, 0) rotate(-2deg) scale(1.14);
+    transform: translate3d(7%, 5%, 0) rotate(var(--intro-shadow-rotate-end, -3deg))
+      scale(1.12);
   }
 }
 
