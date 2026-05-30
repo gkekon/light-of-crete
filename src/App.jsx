@@ -531,13 +531,13 @@ function About() {
           whileInView="visible"
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.7 }}
-          className="overflow-hidden rounded-[34px]"
+          className="aspect-[1.02/1] overflow-hidden rounded-[34px]"
         >
           <img
             src={aboutSection.image}
             alt={aboutSection.imageAlt}
             loading="lazy"
-            className="h-full min-h-[440px] w-full object-cover"
+            className="h-full w-full object-cover object-top"
           />
         </motion.div>
         <motion.div
