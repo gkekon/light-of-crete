@@ -10,6 +10,11 @@ export const siteConfig = {
   formName: 'photoshoot-request',
   formSubject: 'New photoshoot request from Light of Crete',
   successPath: '/success.html',
+  intro: {
+    enabled: true,
+    durationMs: 3900,
+    storageKey: 'light-of-crete-intro-seen-v1',
+  },
 };
 
 export const whatsAppUrl = `https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(

@@ -181,6 +181,90 @@ function BrandLogo({ className = '', markClassName = '' }) {
   );
 }
 
+function shouldShowBrandIntro() {
+  if (!siteConfig.intro.enabled || typeof window === 'undefined') {
+    return false;
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('intro') === '1') {
+    return true;
+  }
+
+  if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+    return false;
+  }
+
+  try {
+    return window.localStorage.getItem(siteConfig.intro.storageKey) !== 'true';
+  } catch {
+    return true;
+  }
+}
+
+function BrandIntro({ onComplete }) {
+  useEffect(() => {
+    document.body.classList.add('intro-lock');
+
+    const timer = window.setTimeout(() => {
+      try {
+        window.localStorage.setItem(siteConfig.intro.storageKey, 'true');
+      } catch {
+        // Ignore storage failures; the intro can simply play again.
+      }
+      onComplete();
+    }, siteConfig.intro.durationMs);
+
+    return () => {
+      window.clearTimeout(timer);
+      document.body.classList.remove('intro-lock');
+    };
+  }, [onComplete]);
+
+  const skipIntro = () => {
+    try {
+      window.localStorage.setItem(siteConfig.intro.storageKey, 'true');
+    } catch {
+      // Ignore storage failures; this is only a preference.
+    }
+    onComplete();
+  };
+
+  return (
+    <motion.div
+      className="brand-intro"
+      initial={{ opacity: 1 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.65, ease: 'easeInOut' }}
+      aria-label={`${siteConfig.brandName} intro`}
+    >
+      <div className="brand-intro-scene">
+        <div className="intro-sun" />
+        <div className="intro-shadow intro-shadow-one" />
+        <div className="intro-shadow intro-shadow-two" />
+        <div className="intro-shadow intro-shadow-three" />
+
+        <motion.div
+          className="brand-intro-lockup"
+          initial={{ opacity: 0, y: 18, scale: 0.985 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 1.05, delay: 0.42, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <LogoMark className="intro-logo-mark" />
+          <h1>{siteConfig.brandName}</h1>
+          <span className="intro-divider" aria-hidden="true" />
+          <p>{siteConfig.brandSubtitle}</p>
+        </motion.div>
+
+        <button type="button" className="intro-skip" onClick={skipIntro}>
+          Skip
+        </button>
+      </div>
+    </motion.div>
+  );
+}
+
 function Header() {
   const [open, setOpen] = useState(false);
 
@@ -755,8 +839,13 @@ function Footer() {
 }
 
 export default function App() {
+  const [showIntro, setShowIntro] = useState(shouldShowBrandIntro);
+
   return (
     <>
+      <AnimatePresence>
+        {showIntro && <BrandIntro onComplete={() => setShowIntro(false)} />}
+      </AnimatePresence>
       <Header />
       <main>
         <Hero />
