@@ -609,6 +609,7 @@ function Contact() {
           className="rounded-[34px] bg-white/82 p-5 shadow-[0_28px_90px_rgba(74,81,64,0.14)] sm:p-8"
         >
           <input type="hidden" name="form-name" value={siteConfig.formName} />
+          <input type="hidden" name="subject" value={siteConfig.formSubject} />
           <p className="hidden">
             <label>
               Do not fill this out if you are human: <input name="bot-field" />

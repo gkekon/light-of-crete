@@ -8,6 +8,7 @@ export const siteConfig = {
   floatingWhatsappLabel: 'Chat on WhatsApp',
   emailRecipient: 'gkekon@gmail.com',
   formName: 'photoshoot-request',
+  formSubject: 'New photoshoot request from Light of Crete',
   successPath: '/success.html',
 };
 
