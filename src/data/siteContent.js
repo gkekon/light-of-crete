@@ -371,6 +371,8 @@ export const contactSection = {
     'Solo traveler photoshoots',
     'Group photography',
     'Maternity photoshoot',
+    'Boudoir photoshoot',
+    'Beach photoshoot',
     'Wedding proposal',
     'Boat trip',
     'Watersports',
