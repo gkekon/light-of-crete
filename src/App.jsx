@@ -14,6 +14,7 @@ import {
   Video,
   X,
 } from 'lucide-react';
+import LightOfCreteIntro from './components/LightOfCreteIntro';
 import { siteConfig, whatsAppUrl } from './config/site';
 import {
   aboutSection,
@@ -888,17 +889,19 @@ function Footer() {
 }
 
 export default function App() {
-  const [showIntro, setShowIntro] = useState(shouldShowBrandIntro);
+  const [introDone, setIntroDone] = useState(false);
 
   return (
     <>
-      <AnimatePresence>
-        {showIntro && <BrandIntro onComplete={() => setShowIntro(false)} />}
-      </AnimatePresence>
-      <motion.div
-        initial={false}
-        animate={showIntro ? { opacity: 0, y: 12 } : { opacity: 1, y: 0 }}
-        transition={{ duration: 1.55, ease: [0.22, 1, 0.36, 1] }}
+      {!introDone && (
+        <LightOfCreteIntro logoSrc="/logo.svg" onComplete={() => setIntroDone(true)} />
+      )}
+      <div
+        style={
+          introDone
+            ? { animation: 'loc-page-appear 1.6s cubic-bezier(0.22, 1, 0.36, 1) both' }
+            : { opacity: 0, pointerEvents: 'none' }
+        }
       >
         <Header />
         <main>
@@ -920,7 +923,7 @@ export default function App() {
         >
           <MessageCircle size={25} aria-hidden="true" />
         </a>
-      </motion.div>
+      </div>
     </>
   );
 }
