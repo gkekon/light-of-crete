@@ -39,7 +39,8 @@ npm run preview
 - `netlify.toml` is already included.
 - The contact form is prepared for Netlify Forms with the form name `photoshoot-request`.
 - After the first Netlify deploy, enable form email notifications in the Netlify dashboard and send them to `gkekon@gmail.com`.
-- The current target is a temporary Netlify URL. Later, connect the custom domain `photoshoots.gkonstantinos.com` in Netlify DNS/domain settings.
+- Production domain: `https://lightofcrete.com/`
+- Add `lightofcrete.com` and `www.lightofcrete.com` in Netlify Domain Management, then set `lightofcrete.com` as the primary domain.
 
 ## Change WhatsApp Number
 
