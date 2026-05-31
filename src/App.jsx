@@ -132,38 +132,32 @@ function LogoMark({ className = '' }) {
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        d="M24 7.6c8.9 0 16.1 7.2 16.1 16.1 0 8.7-7.1 15.8-15.8 15.8-5 0-9.5-2.3-12.4-6"
+        d="M10.8 27.4c.8-9.6 8.3-17.1 17.6-17.7v17.7H10.8Z"
         stroke="currentColor"
-        strokeWidth="1.45"
+        strokeWidth="1.35"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        opacity="0.86"
+      />
+      <path
+        d="M14.2 27.4c1.2-8 8-14.1 16.3-14.1 8.1 0 14.8 6 16 14.1"
+        stroke="currentColor"
+        strokeWidth="1.35"
+        strokeLinecap="round"
+      />
+      <path
+        d="M28.4 13.3v11.1M24 14.4l2.5 10M20.2 16.7l4.4 8.4M16.9 20l6.3 6M33.1 14.6l-2.6 9.8M37 16.8l-4.7 8.3M40.4 20l-6.4 6"
+        stroke="currentColor"
+        strokeWidth="1.05"
         strokeLinecap="round"
         opacity="0.78"
       />
       <path
-        d="M11.3 25.6c3.4-5.2 7.8-7.8 13.1-7.8 5.1 0 9.2 2.3 12.4 6.9"
-        stroke="currentColor"
-        strokeWidth="1.7"
-        strokeLinecap="round"
-      />
-      <path
-        d="M14.6 30.7h18.8"
-        stroke="currentColor"
-        strokeWidth="1.55"
-        strokeLinecap="round"
-        opacity="0.72"
-      />
-      <path
-        d="M31.8 9.9c-4.9 2.3-7.3 6.2-7.3 11.7 0 3.1.9 5.8 2.8 8.2"
-        stroke="currentColor"
-        strokeWidth="1.35"
-        strokeLinecap="round"
-        opacity="0.64"
-      />
-      <path
-        d="M20.9 16.1c1.3-1.5 2.7-2.7 4.2-3.6"
+        d="M10.7 30.7h35.2M13.2 33.5h30M17.4 36.2h21.6"
         stroke="currentColor"
         strokeWidth="1.25"
         strokeLinecap="round"
-        opacity="0.7"
+        opacity="0.68"
       />
     </svg>
   );
