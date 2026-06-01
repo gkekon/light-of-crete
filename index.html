@@ -13,15 +13,20 @@
       content="photoshoots in Crete, private photoshoot Crete, couple photoshoot Crete, family photoshoot Crete, solo traveler photoshoot Crete, maternity photoshoot Crete, boudoir photoshoot Crete, vacation photographer Crete, proposal photographer Crete, photo and video Crete"
     />
     <link rel="canonical" href="https://lightofcrete.com/" />
+    <meta name="robots" content="index, follow" />
     <meta property="og:title" content="Light of Crete | Private Photoshoots in Crete" />
     <meta
       property="og:description"
       content="Book a natural, elegant and cinematic photoshoot in Crete for couples, families, solo travelers, maternity, groups and private experiences. Photo and video options available."
     />
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:url" content="https://lightofcrete.com/" />
     <meta property="og:site_name" content="Light of Crete" />
     <meta property="og:image" content="https://lightofcrete.com/images/hero-couples.webp" />
+    <meta property="og:image:secure_url" content="https://lightofcrete.com/images/hero-couples.webp" />
+    <meta property="og:image:width" content="2600" />
+    <meta property="og:image:height" content="1736" />
     <meta property="og:image:alt" content="A cinematic couple photoshoot by the sea in Crete" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Light of Crete | Private Photoshoots in Crete" />
@@ -35,19 +40,140 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "ProfessionalService",
-        "name": "Light of Crete",
-        "url": "https://lightofcrete.com/",
-        "image": "https://lightofcrete.com/images/hero-couples.webp",
-        "description": "Book a natural, elegant and cinematic photoshoot in Crete for couples, families, solo travelers, maternity, groups and private experiences. Photo and video options available.",
-        "areaServed": {
-          "@type": "Place",
-          "name": "Crete, Greece"
-        },
-        "email": "mailto:gkekon@gmail.com",
-        "telephone": "+306976519440",
-        "sameAs": [
-          "https://wa.me/306976519440"
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://lightofcrete.com/#organization",
+            "name": "Light of Crete",
+            "url": "https://lightofcrete.com/",
+            "logo": "https://lightofcrete.com/images/hero-couples.webp",
+            "image": "https://lightofcrete.com/images/hero-couples.webp",
+            "email": "mailto:lightofcrete@gmail.com",
+            "telephone": "+30 697 651 9440",
+            "sameAs": [
+              "https://www.instagram.com/lightofcrete/",
+              "https://wa.me/306976519440"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://lightofcrete.com/#website",
+            "url": "https://lightofcrete.com/",
+            "name": "Light of Crete",
+            "publisher": {
+              "@id": "https://lightofcrete.com/#organization"
+            },
+            "inLanguage": "en"
+          },
+          {
+            "@type": "ProfessionalService",
+            "@id": "https://lightofcrete.com/#business",
+            "name": "Light of Crete",
+            "url": "https://lightofcrete.com/",
+            "image": "https://lightofcrete.com/images/hero-couples.webp",
+            "description": "Book a natural, elegant and cinematic photoshoot in Crete for couples, families, solo travelers, maternity, groups and private experiences. Photo and video options available.",
+            "email": "mailto:lightofcrete@gmail.com",
+            "telephone": "+30 697 651 9440",
+            "parentOrganization": {
+              "@id": "https://lightofcrete.com/#organization"
+            },
+            "areaServed": [
+              { "@type": "Place", "name": "Crete, Greece" },
+              { "@type": "Place", "name": "Heraklion, Crete" },
+              { "@type": "Place", "name": "Chania, Crete" },
+              { "@type": "Place", "name": "Rethymno, Crete" },
+              { "@type": "Place", "name": "Agios Nikolaos, Crete" },
+              { "@type": "Place", "name": "Elounda, Crete" },
+              { "@type": "Place", "name": "Hersonissos, Crete" },
+              { "@type": "Place", "name": "Malia, Crete" },
+              { "@type": "Place", "name": "Matala, Crete" },
+              { "@type": "Place", "name": "Bali, Crete" }
+            ],
+            "knowsAbout": [
+              "Private photoshoots in Crete",
+              "Couple photoshoots",
+              "Family photoshoots",
+              "Solo traveler portraits",
+              "Maternity photoshoots",
+              "Proposal photography",
+              "Honeymoon photoshoots",
+              "Beach portraits",
+              "Boudoir-inspired portraits",
+              "Boat trip photography",
+              "Villa party photography",
+              "Photo and video experiences"
+            ],
+            "hasOfferCatalog": {
+              "@type": "OfferCatalog",
+              "name": "Light of Crete photography and video services",
+              "itemListElement": [
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Private Photoshoot in Crete",
+                    "description": "Natural, elegant private photoshoots for travelers visiting Crete."
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Couple Photoshoot",
+                    "description": "Romantic couple photography for proposals, honeymoons, anniversaries and travel memories."
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Family Photoshoot",
+                    "description": "Relaxed family vacation photography for parents, children and group family moments."
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Solo Traveler Portraits",
+                    "description": "Artistic solo portraits, beach portraits and personal travel photography in Crete."
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Maternity Photoshoot",
+                    "description": "Soft, natural maternity photography for solo mothers, couples and families."
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Proposal Photography",
+                    "description": "Discreet proposal photography with location guidance in Crete."
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Photo + Video Experience",
+                    "description": "Cinematic photo and short video coverage for travelers, couples, proposals and groups."
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Group and Private Experience Photography",
+                    "description": "Photography for groups, boat trips, villa parties and private experiences in Crete."
+                  }
+                }
+              ]
+            }
+          }
         ]
       }
     </script>
