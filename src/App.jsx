@@ -28,6 +28,7 @@ import {
   photoVideoSection,
   photoshootSection,
 } from './data/siteContent';
+import { trackContactClick, trackLead } from './utils/tracking';
 
 const iconRegistry = {
   heart: Heart,
@@ -38,12 +39,43 @@ const iconRegistry = {
 
 const resolveLink = (href) => (href === 'whatsapp' ? whatsAppUrl : href);
 
+const trackLinkClick = (href, placement = 'link') => {
+  const resolvedHref = resolveLink(href);
+
+  if (!resolvedHref) {
+    return;
+  }
+
+  if (resolvedHref.includes('wa.me/')) {
+    trackLead('whatsapp_click', {
+      link_url: resolvedHref,
+      placement,
+    });
+    return;
+  }
+
+  if (resolvedHref.startsWith('mailto:')) {
+    trackContactClick('email_click', {
+      link_url: resolvedHref,
+      placement,
+    });
+    return;
+  }
+
+  if (resolvedHref.startsWith('tel:')) {
+    trackContactClick('phone_click', {
+      link_url: resolvedHref,
+      placement,
+    });
+  }
+};
+
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
   visible: { opacity: 1, y: 0 },
 };
 
-function ButtonLink({ href, children, variant = 'dark', className = '' }) {
+function ButtonLink({ href, children, variant = 'dark', className = '', trackingPlacement }) {
   const base =
     'inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition duration-300 focus:outline-none focus-visible:ring-4';
   const styles =
@@ -56,7 +88,11 @@ function ButtonLink({ href, children, variant = 'dark', className = '' }) {
         : 'bg-[#222222] text-white shadow-[0_18px_50px_rgba(34,34,34,0.24)] hover:bg-[#4A5140] focus-visible:ring-[#B89B64]/30';
 
   return (
-    <a className={`${base} ${styles} ${className}`} href={href}>
+    <a
+      className={`${base} ${styles} ${className}`}
+      href={href}
+      onClick={() => trackLinkClick(href, trackingPlacement || 'button')}
+    >
       {children}
     </a>
   );
@@ -337,6 +373,7 @@ function Header() {
         <div className="hidden items-center justify-end lg:flex">
           <a
             href={whatsAppUrl}
+            onClick={() => trackLinkClick(whatsAppUrl, 'header')}
             className="whatsapp-header-link rounded-full border border-white/16 bg-white/12 px-5 py-3 text-sm font-medium text-white backdrop-blur-2xl transition duration-300 focus:outline-none focus-visible:ring-4 focus-visible:ring-[#25D366]/22"
           >
             {siteConfig.whatsappLabel}
@@ -375,6 +412,7 @@ function Header() {
               ))}
               <a
                 href={whatsAppUrl}
+                onClick={() => trackLinkClick(whatsAppUrl, 'mobile_menu')}
                 className="whatsapp-header-link mt-1 inline-flex items-center justify-center rounded-full border border-white/16 bg-white/12 px-4 py-3 text-white transition"
               >
                 {siteConfig.whatsappLabel}
@@ -445,7 +483,7 @@ function Hero() {
               <CalendarIcon />
               {heroContent.primaryCta}
             </ButtonLink>
-            <ButtonLink href={whatsAppUrl} variant="outline">
+            <ButtonLink href={whatsAppUrl} variant="outline" trackingPlacement="hero_secondary_cta">
               <MessageCircle size={18} aria-hidden="true" />
               {heroContent.secondaryCta}
             </ButtonLink>
@@ -721,7 +759,7 @@ function About() {
               <Sparkles size={18} aria-hidden="true" />
               {aboutSection.cta}
             </ButtonLink>
-            <ButtonLink href={whatsAppUrl} variant="whatsapp">
+            <ButtonLink href={whatsAppUrl} variant="whatsapp" trackingPlacement="about_secondary_cta">
               <MessageCircle size={18} aria-hidden="true" />
               {aboutSection.secondaryCta}
             </ButtonLink>
@@ -751,6 +789,7 @@ function Contact() {
           <p className="mt-6 text-lg leading-8 text-[#4A5140]">{contactSection.text}</p>
           <a
             href={whatsAppUrl}
+            onClick={() => trackLinkClick(whatsAppUrl, 'contact_section')}
             className="mt-8 inline-flex items-center gap-3 rounded-full bg-[#4A5140] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#222222]"
           >
             <MessageCircle size={18} aria-hidden="true" />
@@ -769,6 +808,12 @@ function Contact() {
           action={siteConfig.successPath}
           data-netlify="true"
           netlify-honeypot="bot-field"
+          onSubmit={() =>
+            trackLead('contact_form_submit', {
+              form_name: siteConfig.formName,
+              placement: 'contact_form',
+            })
+          }
           className="rounded-[34px] bg-white/82 p-5 shadow-[0_28px_90px_rgba(74,81,64,0.14)] sm:p-8"
         >
           <input type="hidden" name="form-name" value={siteConfig.formName} />
@@ -870,11 +915,20 @@ function Footer() {
           <p className="mt-2 max-w-md text-sm leading-6 text-white/62">{footerContent.subtext}</p>
         </div>
         <nav className="flex flex-wrap gap-3 text-sm font-semibold text-white/72">
-          {footerContent.links.map((link) => (
-            <a key={link.id} href={resolveLink(link.href)} className="hover:text-white">
-              {link.label}
-            </a>
-          ))}
+          {footerContent.links.map((link) => {
+            const href = resolveLink(link.href);
+
+            return (
+              <a
+                key={link.id}
+                href={href}
+                onClick={() => trackLinkClick(href, `footer_${link.id}`)}
+                className="hover:text-white"
+              >
+                {link.label}
+              </a>
+            );
+          })}
         </nav>
       </div>
     </footer>
@@ -909,6 +963,7 @@ export default function App() {
         <Footer />
         <a
           href={whatsAppUrl}
+          onClick={() => trackLinkClick(whatsAppUrl, 'floating_whatsapp')}
           className="fixed bottom-5 right-5 z-50 grid h-14 w-14 place-items-center rounded-full bg-[#25D366] text-white shadow-[0_18px_50px_rgba(37,211,102,0.34)] transition hover:scale-105 focus:outline-none focus-visible:ring-4 focus-visible:ring-[#25D366]/30"
           aria-label={siteConfig.floatingWhatsappLabel}
         >
