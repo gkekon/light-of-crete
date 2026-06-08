@@ -12,6 +12,24 @@
   force = true
 
 [[redirects]]
+  from = "/gallery/"
+  to = "https://light-of-crete-gallery-demo.netlify.app/gallery/"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/gallery"
+  to = "/gallery/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/gallery/*"
+  to = "https://light-of-crete-gallery-demo.netlify.app/gallery/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
