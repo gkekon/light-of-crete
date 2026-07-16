@@ -1,9 +1,11 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   ArrowRight,
   Check,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Heart,
   Image,
   MapPin,
@@ -11,6 +13,7 @@ import {
   MessageCircle,
   Send,
   Sparkles,
+  Star,
   Video,
   X,
 } from 'lucide-react';
@@ -20,6 +23,7 @@ import {
   contactSection,
   footerContent,
   gallerySection,
+  googleReviewsSection,
   heroContent,
   introSection,
   locationsSection,
@@ -28,7 +32,6 @@ import {
   photoVideoSection,
   photoshootSection,
 } from './data/siteContent';
-import { trackContactClick, trackLead } from './utils/tracking';
 
 const iconRegistry = {
   heart: Heart,
@@ -39,43 +42,28 @@ const iconRegistry = {
 
 const resolveLink = (href) => (href === 'whatsapp' ? whatsAppUrl : href);
 
-const trackLinkClick = (href, placement = 'link') => {
-  const resolvedHref = resolveLink(href);
-
-  if (!resolvedHref) {
-    return;
-  }
-
-  if (resolvedHref.includes('wa.me/')) {
-    trackLead('whatsapp_click', {
-      link_url: resolvedHref,
-      placement,
-    });
-    return;
-  }
-
-  if (resolvedHref.startsWith('mailto:')) {
-    trackContactClick('email_click', {
-      link_url: resolvedHref,
-      placement,
-    });
-    return;
-  }
-
-  if (resolvedHref.startsWith('tel:')) {
-    trackContactClick('phone_click', {
-      link_url: resolvedHref,
-      placement,
-    });
-  }
-};
-
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
   visible: { opacity: 1, y: 0 },
 };
 
-function ButtonLink({ href, children, variant = 'dark', className = '', trackingPlacement }) {
+const getVisibleReviewCount = () => {
+  if (typeof window === 'undefined') {
+    return 1;
+  }
+
+  if (window.matchMedia('(min-width: 1024px)').matches) {
+    return 3;
+  }
+
+  if (window.matchMedia('(min-width: 720px)').matches) {
+    return 2;
+  }
+
+  return 1;
+};
+
+function ButtonLink({ href, children, variant = 'dark', className = '' }) {
   const base =
     'inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition duration-300 focus:outline-none focus-visible:ring-4';
   const styles =
@@ -88,11 +76,7 @@ function ButtonLink({ href, children, variant = 'dark', className = '', tracking
         : 'bg-[#222222] text-white shadow-[0_18px_50px_rgba(34,34,34,0.24)] hover:bg-[#4A5140] focus-visible:ring-[#B89B64]/30';
 
   return (
-    <a
-      className={`${base} ${styles} ${className}`}
-      href={href}
-      onClick={() => trackLinkClick(href, trackingPlacement || 'button')}
-    >
+    <a className={`${base} ${styles} ${className}`} href={href}>
       {children}
     </a>
   );
@@ -168,32 +152,38 @@ function LogoMark({ className = '' }) {
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        d="M10.8 27.4c.8-9.6 8.3-17.1 17.6-17.7v17.7H10.8Z"
+        d="M24 7.6c8.9 0 16.1 7.2 16.1 16.1 0 8.7-7.1 15.8-15.8 15.8-5 0-9.5-2.3-12.4-6"
         stroke="currentColor"
-        strokeWidth="1.35"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        opacity="0.86"
-      />
-      <path
-        d="M14.2 27.4c1.2-8 8-14.1 16.3-14.1 8.1 0 14.8 6 16 14.1"
-        stroke="currentColor"
-        strokeWidth="1.35"
-        strokeLinecap="round"
-      />
-      <path
-        d="M28.4 13.3v11.1M24 14.4l2.5 10M20.2 16.7l4.4 8.4M16.9 20l6.3 6M33.1 14.6l-2.6 9.8M37 16.8l-4.7 8.3M40.4 20l-6.4 6"
-        stroke="currentColor"
-        strokeWidth="1.05"
+        strokeWidth="1.45"
         strokeLinecap="round"
         opacity="0.78"
       />
       <path
-        d="M10.7 30.7h35.2M13.2 33.5h30M17.4 36.2h21.6"
+        d="M11.3 25.6c3.4-5.2 7.8-7.8 13.1-7.8 5.1 0 9.2 2.3 12.4 6.9"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+      />
+      <path
+        d="M14.6 30.7h18.8"
+        stroke="currentColor"
+        strokeWidth="1.55"
+        strokeLinecap="round"
+        opacity="0.72"
+      />
+      <path
+        d="M31.8 9.9c-4.9 2.3-7.3 6.2-7.3 11.7 0 3.1.9 5.8 2.8 8.2"
+        stroke="currentColor"
+        strokeWidth="1.35"
+        strokeLinecap="round"
+        opacity="0.64"
+      />
+      <path
+        d="M20.9 16.1c1.3-1.5 2.7-2.7 4.2-3.6"
         stroke="currentColor"
         strokeWidth="1.25"
         strokeLinecap="round"
-        opacity="0.68"
+        opacity="0.7"
       />
     </svg>
   );
@@ -208,139 +198,6 @@ function BrandLogo({ className = '', markClassName = '' }) {
         <span className="brand-subtitle">{siteConfig.brandSubtitle}</span>
       </span>
     </span>
-  );
-}
-
-function shouldShowBrandIntro() {
-  if (!siteConfig.intro.enabled || typeof window === 'undefined') {
-    return false;
-  }
-
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('intro') === '1') {
-    return true;
-  }
-
-  if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
-    return false;
-  }
-
-  try {
-    return window.sessionStorage.getItem(siteConfig.intro.storageKey) !== 'true';
-  } catch {
-    return true;
-  }
-}
-
-function BrandIntro({ onComplete }) {
-  const completeIntro = useCallback(() => {
-    try {
-      window.sessionStorage.setItem(siteConfig.intro.storageKey, 'true');
-    } catch {
-      // Ignore storage failures; the intro can simply play again.
-    }
-    onComplete();
-  }, [onComplete]);
-
-  useEffect(() => {
-    document.body.classList.add('intro-lock');
-
-    const timer = window.setTimeout(completeIntro, siteConfig.intro.transitionStartMs);
-
-    return () => {
-      window.clearTimeout(timer);
-      document.body.classList.remove('intro-lock');
-    };
-  }, [completeIntro]);
-
-  const skipIntro = () => {
-    completeIntro();
-  };
-
-  const handlePointerMove = (event) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
-    const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
-    const parallaxX = Math.max(-1, Math.min(1, x)) * 18;
-    const parallaxY = Math.max(-1, Math.min(1, y)) * 12;
-
-    event.currentTarget.style.setProperty('--intro-parallax-x', `${parallaxX}px`);
-    event.currentTarget.style.setProperty('--intro-parallax-y', `${parallaxY}px`);
-    event.currentTarget.style.setProperty('--intro-parallax-x-reverse', `${-parallaxX}px`);
-    event.currentTarget.style.setProperty('--intro-parallax-y-reverse', `${-parallaxY}px`);
-  };
-
-  const resetPointer = (event) => {
-    event.currentTarget.style.setProperty('--intro-parallax-x', '0px');
-    event.currentTarget.style.setProperty('--intro-parallax-y', '0px');
-    event.currentTarget.style.setProperty('--intro-parallax-x-reverse', '0px');
-    event.currentTarget.style.setProperty('--intro-parallax-y-reverse', '0px');
-  };
-
-  return (
-    <motion.div
-      className="brand-intro"
-      initial={{ opacity: 1 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 1.65, ease: [0.22, 1, 0.36, 1] }}
-      aria-label={`${siteConfig.brandName} intro`}
-    >
-      <div
-        className="brand-intro-scene"
-        onPointerMove={handlePointerMove}
-        onPointerLeave={resetPointer}
-      >
-        <div className="intro-sun" />
-        <div className="intro-leaf-shadows" aria-hidden="true">
-          <svg viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice">
-            <g className="leaf-branch leaf-branch-one">
-              <path d="M44 84 C190 146 276 220 390 332" />
-              <ellipse cx="96" cy="118" rx="44" ry="18" transform="rotate(28 96 118)" />
-              <ellipse cx="164" cy="156" rx="56" ry="22" transform="rotate(-18 164 156)" />
-              <ellipse cx="236" cy="204" rx="48" ry="18" transform="rotate(31 236 204)" />
-              <ellipse cx="316" cy="272" rx="62" ry="23" transform="rotate(-14 316 272)" />
-              <ellipse cx="372" cy="326" rx="42" ry="17" transform="rotate(28 372 326)" />
-            </g>
-            <g className="leaf-branch leaf-branch-two">
-              <path d="M130 502 C278 430 418 392 612 360" />
-              <ellipse cx="214" cy="458" rx="52" ry="20" transform="rotate(-34 214 458)" />
-              <ellipse cx="314" cy="421" rx="66" ry="24" transform="rotate(20 314 421)" />
-              <ellipse cx="438" cy="390" rx="58" ry="20" transform="rotate(-21 438 390)" />
-              <ellipse cx="552" cy="368" rx="46" ry="18" transform="rotate(28 552 368)" />
-            </g>
-            <g className="leaf-branch leaf-branch-three">
-              <path d="M742 126 C852 190 932 260 1066 338" />
-              <ellipse cx="790" cy="160" rx="44" ry="18" transform="rotate(34 790 160)" />
-              <ellipse cx="870" cy="214" rx="58" ry="22" transform="rotate(-16 870 214)" />
-              <ellipse cx="960" cy="280" rx="50" ry="19" transform="rotate(24 960 280)" />
-              <ellipse cx="1040" cy="330" rx="44" ry="17" transform="rotate(-20 1040 330)" />
-            </g>
-          </svg>
-        </div>
-
-        <motion.div
-          className="brand-intro-lockup"
-          initial={{ opacity: 0, y: 14, scale: 0.99, filter: 'blur(5px)' }}
-          animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
-          transition={{
-            opacity: { duration: 1.15, delay: 0.28, ease: [0.22, 1, 0.36, 1] },
-            y: { duration: 1.45, delay: 0.28, ease: [0.22, 1, 0.36, 1] },
-            scale: { duration: 1.45, delay: 0.28, ease: [0.22, 1, 0.36, 1] },
-            filter: { duration: 1.35, delay: 0.28, ease: [0.22, 1, 0.36, 1] },
-          }}
-        >
-          <LogoMark className="intro-logo-mark" />
-          <h1>{siteConfig.brandName}</h1>
-          <span className="intro-divider" aria-hidden="true" />
-          <p>{siteConfig.brandSubtitle}</p>
-        </motion.div>
-
-        <button type="button" className="intro-skip" onClick={skipIntro}>
-          Skip
-        </button>
-      </div>
-    </motion.div>
   );
 }
 
@@ -373,7 +230,6 @@ function Header() {
         <div className="hidden items-center justify-end lg:flex">
           <a
             href={whatsAppUrl}
-            onClick={() => trackLinkClick(whatsAppUrl, 'header')}
             className="whatsapp-header-link rounded-full border border-white/16 bg-white/12 px-5 py-3 text-sm font-medium text-white backdrop-blur-2xl transition duration-300 focus:outline-none focus-visible:ring-4 focus-visible:ring-[#25D366]/22"
           >
             {siteConfig.whatsappLabel}
@@ -412,7 +268,6 @@ function Header() {
               ))}
               <a
                 href={whatsAppUrl}
-                onClick={() => trackLinkClick(whatsAppUrl, 'mobile_menu')}
                 className="whatsapp-header-link mt-1 inline-flex items-center justify-center rounded-full border border-white/16 bg-white/12 px-4 py-3 text-white transition"
               >
                 {siteConfig.whatsappLabel}
@@ -483,7 +338,7 @@ function Hero() {
               <CalendarIcon />
               {heroContent.primaryCta}
             </ButtonLink>
-            <ButtonLink href={whatsAppUrl} variant="outline" trackingPlacement="hero_secondary_cta">
+            <ButtonLink href={whatsAppUrl} variant="outline">
               <MessageCircle size={18} aria-hidden="true" />
               {heroContent.secondaryCta}
             </ButtonLink>
@@ -759,12 +614,210 @@ function About() {
               <Sparkles size={18} aria-hidden="true" />
               {aboutSection.cta}
             </ButtonLink>
-            <ButtonLink href={whatsAppUrl} variant="whatsapp" trackingPlacement="about_secondary_cta">
+            <ButtonLink href={whatsAppUrl} variant="whatsapp">
               <MessageCircle size={18} aria-hidden="true" />
               {aboutSection.secondaryCta}
             </ButtonLink>
           </div>
         </motion.div>
+      </div>
+    </section>
+  );
+}
+
+function GoogleReviews() {
+  const fiveStarReviews = googleReviewsSection.reviews.filter((review) => review.rating === 5);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(getVisibleReviewCount);
+  const [expandedReviews, setExpandedReviews] = useState(() => new Set());
+  const hasReviews = fiveStarReviews.length > 0;
+
+  useEffect(() => {
+    const updateVisibleCount = () => setVisibleCount(getVisibleReviewCount());
+    updateVisibleCount();
+    window.addEventListener('resize', updateVisibleCount);
+    return () => window.removeEventListener('resize', updateVisibleCount);
+  }, []);
+
+  useEffect(() => {
+    if (!hasReviews || isPaused || fiveStarReviews.length <= visibleCount) {
+      return undefined;
+    }
+
+    const timer = window.setInterval(() => {
+      setActiveIndex((current) => (current + 1) % fiveStarReviews.length);
+    }, 6500);
+
+    return () => window.clearInterval(timer);
+  }, [fiveStarReviews.length, hasReviews, isPaused, visibleCount]);
+
+  useEffect(() => {
+    if (activeIndex >= fiveStarReviews.length && fiveStarReviews.length > 0) {
+      setActiveIndex(0);
+    }
+  }, [activeIndex, fiveStarReviews.length]);
+
+  const moveReview = (direction) => {
+    if (!hasReviews) {
+      return;
+    }
+
+    setActiveIndex(
+      (current) => (current + direction + fiveStarReviews.length) % fiveStarReviews.length,
+    );
+  };
+
+  const toggleReview = (reviewKey) => {
+    setExpandedReviews((current) => {
+      const next = new Set(current);
+
+      if (next.has(reviewKey)) {
+        next.delete(reviewKey);
+      } else {
+        next.add(reviewKey);
+      }
+
+      return next;
+    });
+  };
+
+  const visibleReviews = hasReviews
+    ? Array.from({ length: Math.min(visibleCount, fiveStarReviews.length) }, (_, offset) => (
+        fiveStarReviews[(activeIndex + offset) % fiveStarReviews.length]
+      ))
+    : [];
+
+  return (
+    <section
+      className="google-reviews-section px-4 py-20 sm:py-28"
+      aria-labelledby="google-reviews-heading"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      onFocus={() => setIsPaused(true)}
+      onBlur={() => setIsPaused(false)}
+    >
+      <div className="section-shell">
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.7, ease: 'easeOut' }}
+          className="google-reviews-header"
+        >
+          <div>
+            <p className="eyebrow mb-4 text-[#B89B64]">{googleReviewsSection.attribution}</p>
+            <h2 id="google-reviews-heading" className="section-heading text-balance text-[#222222]">
+              {googleReviewsSection.title}
+            </h2>
+            <p className="section-copy mt-5 max-w-2xl text-[#4A5140]">
+              {googleReviewsSection.subtitle}
+            </p>
+          </div>
+          <a
+            href={googleReviewsSection.readAllUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="google-reviews-link"
+          >
+            {googleReviewsSection.readAllLabel}
+            <ArrowRight size={16} aria-hidden="true" />
+          </a>
+        </motion.div>
+
+        {hasReviews ? (
+          <div className="mt-10">
+            <div className="google-reviews-track" aria-live="polite">
+              {visibleReviews.map((review) => {
+                const reviewKey = review.sourceUrl || `${review.reviewerName}-${review.relativeDate}`;
+                const reviewTextId = `google-review-${reviewKey.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}`;
+                const isExpanded = expandedReviews.has(reviewKey);
+                const canExpand = review.text.length > 260;
+
+                return (
+                  <article
+                    className={`google-review-card${isExpanded ? ' is-expanded' : ''}`}
+                    key={reviewKey}
+                  >
+                    <div
+                      className="google-review-stars"
+                      aria-label={`${review.rating} out of 5 stars`}
+                    >
+                      {Array.from({ length: 5 }, (_, index) => (
+                        <Star key={index} size={15} fill="currentColor" aria-hidden="true" />
+                      ))}
+                    </div>
+
+                    <div className="google-review-body">
+                      <blockquote id={reviewTextId}>{review.text}</blockquote>
+                      {canExpand && (
+                        <button
+                          type="button"
+                          className="google-review-read-more"
+                          aria-expanded={isExpanded}
+                          aria-controls={reviewTextId}
+                          onClick={() => toggleReview(reviewKey)}
+                        >
+                          {isExpanded ? 'Show less' : 'Read more'}
+                        </button>
+                      )}
+                    </div>
+
+                    <footer>
+                      <span>{review.reviewerName}</span>
+                      {review.relativeDate && <small>{review.relativeDate}</small>}
+                    </footer>
+                  </article>
+                );
+              })}
+            </div>
+
+            <div className="google-reviews-controls" aria-label="Google reviews carousel controls">
+              <button
+                type="button"
+                aria-label="Show previous Google review"
+                onClick={() => moveReview(-1)}
+              >
+                <ChevronLeft size={18} aria-hidden="true" />
+              </button>
+              <span>
+                {activeIndex + 1} / {fiveStarReviews.length}
+              </span>
+              <button
+                type="button"
+                aria-label="Show next Google review"
+                onClick={() => moveReview(1)}
+              >
+                <ChevronRight size={18} aria-hidden="true" />
+              </button>
+            </div>
+          </div>
+        ) : (
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.68, delay: 0.08 }}
+            className="google-review-empty mt-10"
+          >
+            <div className="google-review-stars" aria-label="5 out of 5 stars">
+              {Array.from({ length: 5 }, (_, index) => (
+                <Star key={index} size={18} fill="currentColor" aria-hidden="true" />
+              ))}
+            </div>
+            <p>
+              The Google reviews carousel is ready. Add verified 5-star Google Business Profile
+              reviews in <code>src/data/siteContent.js</code>, or connect a server-side reviews
+              endpoint later.
+            </p>
+            <a href={googleReviewsSection.readAllUrl} target="_blank" rel="noreferrer">
+              {googleReviewsSection.sourceLabel}
+              <ArrowRight size={15} aria-hidden="true" />
+            </a>
+          </motion.div>
+        )}
       </div>
     </section>
   );
@@ -789,7 +842,6 @@ function Contact() {
           <p className="mt-6 text-lg leading-8 text-[#4A5140]">{contactSection.text}</p>
           <a
             href={whatsAppUrl}
-            onClick={() => trackLinkClick(whatsAppUrl, 'contact_section')}
             className="mt-8 inline-flex items-center gap-3 rounded-full bg-[#4A5140] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#222222]"
           >
             <MessageCircle size={18} aria-hidden="true" />
@@ -808,12 +860,6 @@ function Contact() {
           action={siteConfig.successPath}
           data-netlify="true"
           netlify-honeypot="bot-field"
-          onSubmit={() =>
-            trackLead('contact_form_submit', {
-              form_name: siteConfig.formName,
-              placement: 'contact_form',
-            })
-          }
           className="rounded-[34px] bg-white/82 p-5 shadow-[0_28px_90px_rgba(74,81,64,0.14)] sm:p-8"
         >
           <input type="hidden" name="form-name" value={siteConfig.formName} />
@@ -915,20 +961,11 @@ function Footer() {
           <p className="mt-2 max-w-md text-sm leading-6 text-white/62">{footerContent.subtext}</p>
         </div>
         <nav className="flex flex-wrap gap-3 text-sm font-semibold text-white/72">
-          {footerContent.links.map((link) => {
-            const href = resolveLink(link.href);
-
-            return (
-              <a
-                key={link.id}
-                href={href}
-                onClick={() => trackLinkClick(href, `footer_${link.id}`)}
-                className="hover:text-white"
-              >
-                {link.label}
-              </a>
-            );
-          })}
+          {footerContent.links.map((link) => (
+            <a key={link.id} href={resolveLink(link.href)} className="hover:text-white">
+              {link.label}
+            </a>
+          ))}
         </nav>
       </div>
     </footer>
@@ -936,40 +973,29 @@ function Footer() {
 }
 
 export default function App() {
-  const [showIntro, setShowIntro] = useState(shouldShowBrandIntro);
-
   return (
     <>
-      <AnimatePresence>
-        {showIntro && <BrandIntro onComplete={() => setShowIntro(false)} />}
-      </AnimatePresence>
-      <motion.div
-        initial={false}
-        animate={showIntro ? { opacity: 0, y: 12 } : { opacity: 1, y: 0 }}
-        transition={{ duration: 1.55, ease: [0.22, 1, 0.36, 1] }}
+      <Header />
+      <main>
+        <Hero />
+        <Intro />
+        <Categories />
+        <PhotoVideo />
+        <Locations />
+        <Gallery />
+        <Options />
+        <About />
+        <GoogleReviews />
+        <Contact />
+      </main>
+      <Footer />
+      <a
+        href={whatsAppUrl}
+        className="fixed bottom-5 right-5 z-50 grid h-14 w-14 place-items-center rounded-full bg-[#25D366] text-white shadow-[0_18px_50px_rgba(37,211,102,0.34)] transition hover:scale-105 focus:outline-none focus-visible:ring-4 focus-visible:ring-[#25D366]/30"
+        aria-label={siteConfig.floatingWhatsappLabel}
       >
-        <Header />
-        <main>
-          <Hero />
-          <Intro />
-          <Categories />
-          <PhotoVideo />
-          <Locations />
-          <Gallery />
-          <Options />
-          <About />
-          <Contact />
-        </main>
-        <Footer />
-        <a
-          href={whatsAppUrl}
-          onClick={() => trackLinkClick(whatsAppUrl, 'floating_whatsapp')}
-          className="fixed bottom-5 right-5 z-50 grid h-14 w-14 place-items-center rounded-full bg-[#25D366] text-white shadow-[0_18px_50px_rgba(37,211,102,0.34)] transition hover:scale-105 focus:outline-none focus-visible:ring-4 focus-visible:ring-[#25D366]/30"
-          aria-label={siteConfig.floatingWhatsappLabel}
-        >
-          <MessageCircle size={25} aria-hidden="true" />
-        </a>
-      </motion.div>
+        <MessageCircle size={25} aria-hidden="true" />
+      </a>
     </>
   );
 }

@@ -342,6 +342,51 @@ export const aboutSection = {
   secondaryCta: 'Chat on WhatsApp',
 };
 
+export const googleReviewsSection = {
+  title: 'Loved by travelers in Crete',
+  subtitle: 'Real 5-star Google reviews from guests photographed in Crete.',
+  attribution: 'Google reviews',
+  sourceLabel: 'Google Maps',
+  readAllLabel: 'Read all reviews on Google',
+  // TODO: Replace this search URL with the final Google Business Profile review URL
+  // once the Light of Crete Google Business Profile is verified.
+  readAllUrl: 'https://www.google.com/search?q=Light+of+Crete+Crete+Google+reviews',
+  // Static fallback for manually approved real reviews.
+  // Only add verified Google Business Profile reviews here, and keep rating === 5.
+  // Later this can be replaced by a safe server-side endpoint that fetches Google reviews,
+  // filters rating === 5, and returns only: reviewerName, text, relativeDate, rating.
+  reviews: [
+    {
+      reviewerName: 'Andrea Molnár',
+      rating: 5,
+      relativeDate: '20 hours ago',
+      text: 'The photoshoot was a great experience: fun, punctual, and efficient. They really connected well with my son too. It was an enjoyable time, and the resulting photos are, of course, wonderful keepsakes.',
+      sourceUrl: 'https://www.google.com/maps/contrib/104530345593164920646/reviews?hl=el-GR',
+    },
+    {
+      reviewerName: 'Pillet Baptiste',
+      rating: 5,
+      relativeDate: '1 day ago',
+      text: 'A wonderful experience and a beautiful result. Konstantinos quickly made us feel at ease and was courteous and professional throughout. Many thanks to him again!',
+      sourceUrl: 'https://www.google.com/maps/contrib/117759701984439410735/reviews?hl=el-GR',
+    },
+    {
+      reviewerName: 'Adrian S',
+      rating: 5,
+      relativeDate: '6 days ago',
+      text: 'We had a very good expierience with Konstantinos. He took his time with our photo shoot, was very patient and made a positive atmosphere. We would definitely book him again!',
+      sourceUrl: 'https://www.google.com/maps/contrib/105670472813637947543/reviews?hl=el-GR',
+    },
+    {
+      reviewerName: 'Olu Kola-Korolo',
+      rating: 5,
+      relativeDate: '1 week ago',
+      text: 'Our beach photoshoot with Konstantinos was one of the highlights of our trip. From the moment we met him, he was warm, professional, and incredibly easy to work with. He made everyone feel comfortable and knew exactly how to capture natural, authentic moments without making the session feel staged. His eye for detail, lighting, and composition is exceptional, and the stunning beach scenery was brought to life beautifully through his photography. He was patient, creative, and guided us effortlessly throughout the shoot, making the entire experience enjoyable and relaxed. If you are looking for a photographer who is talented, reliable, and genuinely passionate about creating unforgettable memories, I cannot recommend Konstantinos highly enough. We are absolutely thrilled with our photos and will treasure them for years to come. Thank you for helping us capture such a special moment in our lives!',
+      sourceUrl: 'https://www.google.com/maps/contrib/108313430403092186402/reviews?hl=el-GR',
+    },
+  ],
+};
+
 export const contactSection = {
   eyebrow: 'Booking request',
   title: 'Book your photoshoot in Crete.',
@@ -371,8 +416,6 @@ export const contactSection = {
     'Solo traveler photoshoots',
     'Group photography',
     'Maternity photoshoot',
-    'Boudoir photoshoot',
-    'Beach photoshoot',
     'Wedding proposal',
     'Boat trip',
     'Watersports',
