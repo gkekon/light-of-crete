@@ -41,9 +41,18 @@
 
 - Reviews section is placed above the booking/contact form.
 - Data lives in `src/data/siteContent.js` under `googleReviewsSection`.
-- Current review array includes four manually provided real 5-star Google reviews.
+- Current review array includes five manually provided real 5-star Google reviews.
 - Review cards should stay compact. Long reviews use Read more / Show less instead of stretching the whole section.
+- Avoid showing separate Google value/price tags such as `Εξαιρετική τιμή` inside the premium website reviews section.
 - Later integration should happen through a safe server-side/API function, not by placing API keys in frontend code.
+
+## Current Gallery Page Setup
+
+- A second gallery page is being prepared at `/gallery`.
+- Public title: `Pictures from Photoshoots in Crete`.
+- Homepage gallery CTA: `See more pictures`.
+- Data lives in `src/data/siteContent.js` under `galleryPageContent`.
+- The page currently reuses existing optimized local images and is ready to accept more photoshoot images later.
 
 ## Approved/Important Content
 

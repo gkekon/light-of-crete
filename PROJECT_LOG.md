@@ -34,6 +34,19 @@ This file is a working log of local project changes and decisions. It is not a d
 - Preserved the reviewer profile URLs in the data for future source/reference use.
 - Refined the reviews carousel cards to be more compact, with smaller typography, balanced card spacing, and a Read more / Show less control for long reviews.
 
+## 2026-07-16
+
+- Started preparing a second gallery page at `/gallery`.
+- Chose the public page title `Pictures from Photoshoots in Crete` and kept the simple URL/name `Gallery`.
+- Added a `See more pictures` CTA under the homepage masonry gallery.
+- Added `galleryPageContent` in `src/data/siteContent.js` so the page can later be expanded or connected to a CMS.
+- Built the gallery page as a cinematic hero plus premium masonry grid using existing optimized local images.
+
+## 2026-07-18
+
+- Added the Beatrice Cristian 5-star Google review to the local reviews array.
+- Kept the review text premium and clean by not displaying the separate Google note/tag `Εξαιρετική τιμή`.
+
 ## Notes
 
 - Do not deploy, push, or change Netlify/GitHub settings unless Konstantinos explicitly asks.

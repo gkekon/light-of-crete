@@ -7,7 +7,6 @@ import {
   ChevronLeft,
   ChevronRight,
   Heart,
-  Image,
   MapPin,
   Menu,
   MessageCircle,
@@ -18,10 +17,12 @@ import {
   X,
 } from 'lucide-react';
 import { siteConfig, whatsAppUrl } from './config/site';
+import { PackageGlyph } from './components/PackageGlyphs';
 import {
   aboutSection,
   contactSection,
   footerContent,
+  galleryPageContent,
   gallerySection,
   googleReviewsSection,
   heroContent,
@@ -41,6 +42,26 @@ const iconRegistry = {
 };
 
 const resolveLink = (href) => (href === 'whatsapp' ? whatsAppUrl : href);
+
+const isGalleryRoute = () => {
+  if (typeof window === 'undefined') {
+    return false;
+  }
+
+  return window.location.pathname.replace(/\/$/, '') === '/gallery';
+};
+
+const resolveNavHref = (href, isInnerPage) => {
+  if (href === 'whatsapp') {
+    return whatsAppUrl;
+  }
+
+  if (isInnerPage && href.startsWith('#')) {
+    return `/${href}`;
+  }
+
+  return href;
+};
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -203,12 +224,13 @@ function BrandLogo({ className = '', markClassName = '' }) {
 
 function Header() {
   const [open, setOpen] = useState(false);
+  const isInnerPage = isGalleryRoute();
 
   return (
     <header className="site-header-bar fixed inset-x-0 top-0 z-50">
       <div className="site-header-shell mx-auto grid min-h-[74px] max-w-[1280px] grid-cols-[1fr_auto] items-center gap-4 px-5 py-3 sm:px-6 lg:min-h-[80px] lg:grid-cols-[1fr_auto_1fr] lg:px-8">
         <a
-          href="#top"
+          href={isInnerPage ? '/' : '#top'}
           className="brand-anchor text-white"
           aria-label={`${siteConfig.brandName} home`}
         >
@@ -219,7 +241,7 @@ function Header() {
           {navItems.map((item) => (
             <a
               key={item.id}
-              href={item.href}
+              href={resolveNavHref(item.href, isInnerPage)}
               className="header-nav-link"
             >
               {item.label}
@@ -259,7 +281,7 @@ function Header() {
               {navItems.map((item) => (
                 <a
                   key={item.id}
-                  href={item.href}
+                  href={resolveNavHref(item.href, isInnerPage)}
                   onClick={() => setOpen(false)}
                   className="px-1 py-3 transition hover:text-white"
                 >
@@ -533,8 +555,87 @@ function Gallery() {
             </motion.figure>
           ))}
         </div>
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.7, ease: 'easeOut' }}
+          className="gallery-more-cta"
+        >
+          <a href={gallerySection.ctaHref}>
+            {gallerySection.ctaLabel}
+            <ArrowRight size={17} aria-hidden="true" />
+          </a>
+        </motion.div>
       </div>
     </section>
+  );
+}
+
+function GalleryPage() {
+  return (
+    <>
+      <section id="top" className="gallery-page-hero">
+        <img
+          src={galleryPageContent.heroImage}
+          alt={galleryPageContent.heroAlt}
+          loading="eager"
+          fetchPriority="high"
+        />
+        <div className="gallery-page-hero-overlay" />
+        <div className="section-shell gallery-page-hero-content">
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            animate="visible"
+            transition={{ duration: 0.82, ease: 'easeOut' }}
+            className="max-w-4xl"
+          >
+            <p className="eyebrow mb-4 text-[#E8DCC8]">{galleryPageContent.eyebrow}</p>
+            <h1 className="gallery-page-title text-balance">{galleryPageContent.title}</h1>
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-white/78">
+              {galleryPageContent.text}
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <ButtonLink href="/" variant="outline">
+                {galleryPageContent.backLabel}
+              </ButtonLink>
+              <ButtonLink href="/#contact" variant="light">
+                {galleryPageContent.contactLabel}
+                <ArrowRight size={17} aria-hidden="true" />
+              </ButtonLink>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      <section className="gallery-page-body px-4 py-20 sm:py-28">
+        <div className="section-shell">
+          <div className="gallery-page-masonry">
+            {galleryPageContent.items.map((item, index) => (
+              <motion.figure
+                key={item.id}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: '-70px' }}
+                transition={{ duration: 0.62, delay: (index % 4) * 0.04 }}
+                className="gallery-page-item group"
+              >
+                <img
+                  src={item.src}
+                  alt={item.alt}
+                  loading={index < 6 ? 'eager' : 'lazy'}
+                  className="w-full object-cover transition duration-700 group-hover:scale-[1.025]"
+                />
+                <figcaption>{item.label}</figcaption>
+              </motion.figure>
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
 
@@ -544,7 +645,7 @@ function Options() {
       <div className="section-shell">
         <SectionIntro title={packagesSection.title} />
         <MobileExpandable collapsedHeight={520}>
-          <div className="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {packagesSection.packages.map((option, index) => (
               <motion.article
                 key={option.id}
@@ -555,8 +656,8 @@ function Options() {
                 transition={{ duration: 0.62, delay: index * 0.06 }}
                 className="rounded-[28px] border border-[#4A5140]/10 bg-white/76 p-6 shadow-[0_18px_58px_rgba(74,81,64,0.08)]"
               >
-                <div className="mb-6 grid h-11 w-11 place-items-center rounded-full bg-[#E8DCC8] text-[#4A5140]">
-                  <Image size={20} aria-hidden="true" />
+                <div className="mb-6 grid h-14 w-14 place-items-center rounded-full bg-[#E8DCC8]">
+                  <PackageGlyph name={option.id} className="h-9 w-9" />
                 </div>
                 <h3 className="text-xl font-medium text-[#222222]">{option.title}</h3>
                 <p className="mt-3 min-h-20 leading-7 text-[#4A5140]">{option.text}</p>
@@ -953,6 +1054,8 @@ function Label({ text, children, className = '' }) {
 }
 
 function Footer() {
+  const isInnerPage = isGalleryRoute();
+
   return (
     <footer className="bg-[#222222] px-4 py-12 text-white">
       <div className="section-shell flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
@@ -962,7 +1065,11 @@ function Footer() {
         </div>
         <nav className="flex flex-wrap gap-3 text-sm font-semibold text-white/72">
           {footerContent.links.map((link) => (
-            <a key={link.id} href={resolveLink(link.href)} className="hover:text-white">
+            <a
+              key={link.id}
+              href={resolveNavHref(resolveLink(link.href), isInnerPage)}
+              className="hover:text-white"
+            >
               {link.label}
             </a>
           ))}
@@ -973,20 +1080,34 @@ function Footer() {
 }
 
 export default function App() {
+  const isGalleryPage = isGalleryRoute();
+
+  useEffect(() => {
+    document.title = isGalleryPage
+      ? 'Pictures from Photoshoots in Crete | Light of Crete'
+      : 'Light of Crete | Private Photoshoots in Crete';
+  }, [isGalleryPage]);
+
   return (
     <>
       <Header />
       <main>
-        <Hero />
-        <Intro />
-        <Categories />
-        <PhotoVideo />
-        <Locations />
-        <Gallery />
-        <Options />
-        <About />
-        <GoogleReviews />
-        <Contact />
+        {isGalleryPage ? (
+          <GalleryPage />
+        ) : (
+          <>
+            <Hero />
+            <Intro />
+            <Categories />
+            <PhotoVideo />
+            <Locations />
+            <Gallery />
+            <Options />
+            <About />
+            <GoogleReviews />
+            <Contact />
+          </>
+        )}
       </main>
       <Footer />
       <a

@@ -152,6 +152,8 @@ export const locationsSection = {
 export const gallerySection = {
   eyebrow: 'Portfolio',
   title: 'Moments from Crete.',
+  ctaLabel: 'See more pictures',
+  ctaHref: '/gallery',
   items: [
     {
       id: 'family-mother',
@@ -282,6 +284,67 @@ export const gallerySection = {
   ],
 };
 
+export const galleryPageContent = {
+  eyebrow: 'Gallery',
+  title: 'Pictures from Photoshoots in Crete',
+  text: 'A growing collection of natural, elegant and cinematic photoshoot moments across Crete: couples, families, solo travelers, maternity, beach portraits and private experiences.',
+  backLabel: 'Back to homepage',
+  contactLabel: 'Book your photoshoot',
+  heroImage: '/images/gallery-couple-coast.webp',
+  heroAlt: 'A cinematic couple photoshoot by the Cretan coast.',
+  items: [
+    ...gallerySection.items,
+    {
+      id: 'couple-coast',
+      src: '/images/gallery-couple-coast.webp',
+      alt: 'A couple photographed along the Cretan coast in soft Mediterranean light.',
+      label: 'Coastal couple',
+    },
+    {
+      id: 'couple-dunes',
+      src: '/images/gallery-couple-dunes.webp',
+      alt: 'A romantic couple photoshoot among warm coastal dunes.',
+      label: 'Dune story',
+    },
+    {
+      id: 'couple-mountain',
+      src: '/images/gallery-couple-mountain.webp',
+      alt: 'A black and white couple portrait with mountains in the background.',
+      label: 'Mountain romance',
+    },
+    {
+      id: 'couple-blackwhite',
+      src: '/images/gallery-couple-blackwhite.webp',
+      alt: 'A timeless black and white couple photoshoot moment.',
+      label: 'Black and white',
+    },
+    {
+      id: 'maternity-shadow',
+      src: '/images/gallery-maternity-shadow.webp',
+      alt: 'An elegant maternity photoshoot with soft shadow and warm tones.',
+      label: 'Maternity',
+    },
+    {
+      id: 'solo-sand-dress',
+      src: '/images/gallery-solo-sand-dress.webp',
+      alt: 'A solo traveler portrait lying peacefully on warm Cretan sand.',
+      label: 'Solo portrait',
+    },
+    {
+      id: 'solo-water',
+      src: '/images/gallery-solo-water.webp',
+      alt: 'A solo water portrait with cinematic Mediterranean atmosphere.',
+      label: 'Water portrait',
+    },
+    {
+      id: 'swimwear-stone',
+      src: '/images/gallery-swimwear-stone.webp',
+      alt: 'A tasteful swimwear portrait by the rocks and sea.',
+      label: 'Swimwear',
+    },
+  ],
+};
+
 export const packagesSection = {
   title: 'Simple options, tailored around your story.',
   packages: [
@@ -308,6 +371,17 @@ export const packagesSection = {
       ],
     },
     {
+      id: 'island-story',
+      title: 'Island Story',
+      text: 'A two-location journey through Crete — two settings, one beautiful story.',
+      points: [
+        'Around two hours of shooting',
+        'Two locations in one session',
+        'Traditional village & beach, or villa & dinner',
+        'Ideal for couples, honeymoons and proposals',
+      ],
+    },
+    {
       id: 'photo-video-experience',
       title: 'Photo + Video Experience',
       text: 'A cinematic option for travelers who want both stills and motion.',
@@ -321,7 +395,7 @@ export const packagesSection = {
     {
       id: 'custom-experience',
       title: 'Custom Experience',
-      text: 'Tailor-made photography for proposals, groups, parties, maternity or private experiences.',
+      text: 'Tailor-made photography for proposals, groups, parties, birthdays or private experiences.',
       points: [
         'Flexible planning',
         'Events and activities',
@@ -356,6 +430,13 @@ export const googleReviewsSection = {
   // Later this can be replaced by a safe server-side endpoint that fetches Google reviews,
   // filters rating === 5, and returns only: reviewerName, text, relativeDate, rating.
   reviews: [
+    {
+      reviewerName: 'Beatrice Cristian',
+      rating: 5,
+      relativeDate: '1 hour ago',
+      text: "We had the most wonderful family photoshoot in Crete, and we couldn't have asked for a better photographer. From the very beginning, he made us feel completely relaxed and comfortable. He never rushed us and paid incredible attention to every little detail. He knew exactly how to use the beautiful sunset light, and how to capture the most magical moments. What impressed us the most is that these are not just beautiful photos, they are real memories. He captured our genuine emotions, our laughter, our connection as a family, and the little moments that truly represent who we are. Every picture tells a story. The final gallery exceeded all our expectations. The photos are absolutely stunning, and they will always remind us of one of the happiest moments of our vacation in Crete. If you're looking for someone who is talented, patient, passionate, and truly gifted at capturing authentic emotions, we wholeheartedly recommend him. Thank you for giving us memories that we will cherish for a lifetime!",
+      sourceUrl: 'https://www.google.com/maps/contrib/104087814288634722905/reviews?hl=el-GR',
+    },
     {
       reviewerName: 'Andrea Molnár',
       rating: 5,
