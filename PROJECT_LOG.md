@@ -47,6 +47,14 @@ This file is a working log of local project changes and decisions. It is not a d
 - Added the Beatrice Cristian 5-star Google review to the local reviews array.
 - Kept the review text premium and clean by not displaying the separate Google note/tag `Εξαιρετική τιμή`.
 
+## 2026-08-27
+
+- Fixed a conversion-tracking regression: commit `335e456` (Add Google reviews carousel, 16 Jul) rewrote `src/App.jsx` and removed every `trackLead` / `trackContactClick` call, leaving `src/utils/tracking.js` orphaned and tree-shaken out of the bundle. The live site had fired no GA4 custom events since the 18 Jul deploy.
+- Consequence: `whatsapp_click` and `contact_form_submit` — both imported into Google Ads as primary conversions — recorded 0 for 30 days, so Smart Bidding starved the Search campaign (~EUR 3/day of a EUR 10 budget, 52% impression share lost to rank).
+- Re-wired tracking as a single delegated click listener (`initLinkTracking` in `src/utils/tracking.js`, called from `src/main.jsx`) so a future `App.jsx` refactor cannot silently remove it again.
+- Added the GA4 tag to `public/success.html` and fire `contact_form_submit` + `generate_lead` there, since the Netlify form redirects to that page only on success.
+- Verified in GA4 Realtime that `whatsapp_click` and `contact_form_submit` register as key events again.
+
 ## Notes
 
 - Do not deploy, push, or change Netlify/GitHub settings unless Konstantinos explicitly asks.

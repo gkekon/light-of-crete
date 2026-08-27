@@ -50,6 +50,25 @@
         font-weight: 700;
       }
     </style>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-25X9V0E94M"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-25X9V0E94M');
+
+      // Η φόρμα κάνει redirect εδώ ΜΟΝΟ μετά από επιτυχή υποβολή στο Netlify,
+      // οπότε αυτή η σελίδα είναι η αξιόπιστη στιγμή για τη μετατροπή.
+      gtag('event', 'contact_form_submit', {
+        event_category: 'lead',
+        lead_source: 'contact_form_submit',
+      });
+      gtag('event', 'generate_lead', {
+        event_category: 'lead',
+        lead_source: 'contact_form_submit',
+      });
+    </script>
   </head>
   <body>
     <main>
