@@ -41,14 +41,15 @@
 
 - Reviews section is placed above the booking/contact form.
 - Data lives in `src/data/siteContent.js` under `googleReviewsSection`.
-- Current review array includes five manually provided real 5-star Google reviews.
+- Current review array includes eleven real 5-star Google reviews (six added 2026-10-12 from the Business Profile).
 - Review cards should stay compact. Long reviews use Read more / Show less instead of stretching the whole section.
 - Avoid showing separate Google value/price tags such as `Εξαιρετική τιμή` inside the premium website reviews section.
 - Later integration should happen through a safe server-side/API function, not by placing API keys in frontend code.
 
 ## Current Gallery Page Setup
 
-- A second gallery page is being prepared at `/gallery`.
+- The public portfolio page lives at `/gallery`.
+- The private client gallery (separate Netlify project) is proxied at `/clients`; never put anything else under `/clients` or `/gallery/api`.
 - Public title: `Pictures from Photoshoots in Crete`.
 - Homepage gallery CTA: `See more pictures`.
 - Data lives in `src/data/siteContent.js` under `galleryPageContent`.

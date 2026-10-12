@@ -55,6 +55,15 @@ This file is a working log of local project changes and decisions. It is not a d
 - Added the GA4 tag to `public/success.html` and fire `contact_form_submit` + `generate_lead` there, since the Netlify form redirects to that page only on success.
 - Verified in GA4 Realtime that `whatsapp_click` and `contact_form_submit` register as key events again.
 
+## 2026-10-12
+
+- Moved the private client gallery from `/gallery` to `/clients` (proxy to the separate Netlify project `light-of-crete-gallery-demo`). `/gallery` now shows the public portfolio page built on 16 Jul, which the old proxy had been hiding since it was written.
+- Old client links (`/gallery/?gallery=...`), Viva payment returns and returning clients with a bookmarked `/gallery/` are forwarded to `/clients/` by an inline script at the top of `index.html`. `/gallery/api/*` stays proxied on purpose: the Viva webhook URL is set in the Viva dashboard and may still point there.
+- Deploy order matters: the client gallery project must be deployed first (it has to answer under `/clients`), then this site.
+- Added six new real 5-star Google reviews (Angelika Giavis, Yael Bak, Giusi Valente, Thomas Biddle, Madisone Sauvageot, Gabrielle woudt), copied from the Google Business Profile on this date. The profile showed 10 reviews; Olu Kola-Korolo's review was no longer listed there but was left on the site.
+- Refreshed the relative dates of the older reviews and pointed "Read all reviews on Google" at the Maps listing instead of a search.
+- `robots.txt` disallows `/clients/`; `/gallery` added to the sitemap.
+
 ## Notes
 
 - Do not deploy, push, or change Netlify/GitHub settings unless Konstantinos explicitly asks.

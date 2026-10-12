@@ -2,6 +2,26 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      // The private client gallery moved from /gallery to /clients. Forward old
+      // client links and Viva payment returns before the portfolio page renders.
+      (function () {
+        try {
+          if (!/^\/gallery\/?$/.test(location.pathname)) return;
+          var params = new URLSearchParams(location.search);
+          var clientLink = ['gallery', 's', 't', 'orderCode', 'transactionId', 'payment'].some(function (key) {
+            return params.has(key);
+          });
+          // A returning client who bookmarked the bare /gallery/ address.
+          var returningClient =
+            !!localStorage.getItem('light-of-crete-last-gallery') &&
+            document.referrer.indexOf(location.origin) !== 0;
+          if (clientLink || returningClient) {
+            location.replace('/clients/' + location.search + location.hash);
+          }
+        } catch (error) {}
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Light of Crete | Private Photoshoots in Crete</title>
     <meta

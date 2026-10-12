@@ -11,22 +11,45 @@
   status = 301
   force = true
 
+# Client gallery (private, code-protected) lives at /clients and is served by
+# the separate Netlify project. /gallery is the public portfolio page.
 [[redirects]]
-  from = "/gallery/"
-  to = "https://light-of-crete-gallery-demo.netlify.app/gallery/"
+  from = "/clients/"
+  to = "https://light-of-crete-gallery-demo.netlify.app/clients/"
   status = 200
   force = true
 
 [[redirects]]
-  from = "/gallery"
-  to = "/gallery/"
+  from = "/clients"
+  to = "/clients/"
   status = 301
   force = true
 
 [[redirects]]
-  from = "/gallery/*"
-  to = "https://light-of-crete-gallery-demo.netlify.app/gallery/:splat"
+  from = "/clients/*"
+  to = "https://light-of-crete-gallery-demo.netlify.app/clients/:splat"
   status = 200
+  force = true
+
+# The client gallery used to live at /gallery. Its API stays reachable there
+# for the Viva webhook and download links already sent to clients; old client
+# links (/gallery/?gallery=...) are forwarded by the inline script in index.html.
+[[redirects]]
+  from = "/gallery/api/*"
+  to = "https://light-of-crete-gallery-demo.netlify.app/api/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/gallery/admin/*"
+  to = "/clients/admin/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/gallery/admin"
+  to = "/clients/admin/"
+  status = 301
   force = true
 
 [[redirects]]
