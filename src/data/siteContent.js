@@ -460,7 +460,7 @@ export const googleReviewsSection = {
       reviewerName: "Madisone Sauvageot",
       rating: 5,
       relativeDate: '1 month ago',
-      text: "Photographe o top mais photo son incroyable je vous le recommande à 10000% super gentils à l’écoute travail parfait 😍",
+      text: "Photographe au top, et ses photos sont incroyables ! Je vous le recommande à 10000 %. Super gentil, à l’écoute, travail parfait 😍",
       sourceUrl: 'https://www.google.com/maps/contrib/107872693834855380774/reviews?hl=el-GR',
     },
     {
