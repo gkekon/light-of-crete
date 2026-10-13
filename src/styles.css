@@ -789,3 +789,16 @@ select {
     transition-duration: 0.001ms !important;
   }
 }
+
+/* Drop markers while dragging photos inside the portfolio admin preview. */
+.gallery-page-item[draggable='true'] {
+  cursor: grab;
+}
+
+.gallery-page-item[data-drop='before'] {
+  box-shadow: -6px 0 0 #b08d57;
+}
+
+.gallery-page-item[data-drop='after'] {
+  box-shadow: 6px 0 0 #b08d57;
+}

@@ -575,13 +575,83 @@ function Gallery() {
 
 const galleryStyles = ['editorial', 'masonry', 'justified'];
 
+// The portfolio admin (npm run portfolio) shows this page in an iframe and
+// sends unsaved edits to it, so changes appear without a reload and photos can
+// be dragged into order right here. Dev server only; never active on the live site.
+const isPortfolioPreview =
+  import.meta.env.DEV &&
+  typeof window !== 'undefined' &&
+  (window.parent !== window || window.location.search.includes('portfolio-preview'));
+const portfolioAdminOrigins = ['http://127.0.0.1:4600', 'http://localhost:4600'];
+
+function usePortfolioPreview() {
+  const [live, setLive] = useState(null);
+
+  useEffect(() => {
+    if (!isPortfolioPreview) return undefined;
+    const onMessage = (event) => {
+      if (portfolioAdminOrigins.includes(event.origin) && event.data?.type === 'loc-portfolio') {
+        setLive(event.data.portfolio);
+      }
+    };
+    window.addEventListener('message', onMessage);
+    window.parent.postMessage({ type: 'loc-portfolio-ready' }, '*');
+    return () => window.removeEventListener('message', onMessage);
+  }, []);
+
+  return live;
+}
+
+const clearDropMarks = (container) =>
+  container.querySelectorAll('[data-drop]').forEach((element) => element.removeAttribute('data-drop'));
+
+const portfolioDragHandlers = {
+  onDragStart: (event) => {
+    const figure = event.target.closest('[data-id]');
+    if (!figure) return;
+    event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData('text/plain', figure.dataset.id);
+    event.currentTarget.dataset.dragId = figure.dataset.id;
+  },
+  onDragOver: (event) => {
+    const figure = event.target.closest('[data-id]');
+    const dragId = event.currentTarget.dataset.dragId;
+    if (!figure || !dragId || figure.dataset.id === dragId) return;
+    event.preventDefault();
+    const box = figure.getBoundingClientRect();
+    clearDropMarks(event.currentTarget);
+    figure.dataset.drop = event.clientX < box.left + box.width / 2 ? 'before' : 'after';
+  },
+  onDrop: (event) => {
+    const figure = event.target.closest('[data-id]');
+    const dragId = event.currentTarget.dataset.dragId;
+    if (!figure || !dragId || figure.dataset.id === dragId) return;
+    event.preventDefault();
+    window.parent.postMessage(
+      {
+        type: 'loc-portfolio-reorder',
+        dragId,
+        targetId: figure.dataset.id,
+        before: figure.dataset.drop !== 'after',
+      },
+      '*',
+    );
+  },
+  onDragEnd: (event) => {
+    delete event.currentTarget.dataset.dragId;
+    clearDropMarks(event.currentTarget);
+  },
+};
+
 function GalleryPage() {
-  const galleryStyle = galleryStyles.includes(galleryPageContent.style)
-    ? galleryPageContent.style
+  const live = usePortfolioPreview();
+  const content = live ? { ...galleryPageContent, ...live } : galleryPageContent;
+  const galleryStyle = galleryStyles.includes(content.style)
+    ? content.style
     : 'masonry';
   // Only categories that actually have photos become filter buttons.
-  const categories = galleryPageContent.categories.filter((category) =>
-    galleryPageContent.items.some((item) => item.category === category.id),
+  const categories = content.categories.filter((category) =>
+    content.items.some((item) => item.category === category.id),
   );
   const [activeCategory, setActiveCategory] = useState(() => {
     if (typeof window === 'undefined') return '';
@@ -589,15 +659,15 @@ function GalleryPage() {
     return categories.some((category) => category.id === requested) ? requested : '';
   });
   const visibleItems = activeCategory
-    ? galleryPageContent.items.filter((item) => item.category === activeCategory)
-    : galleryPageContent.items;
+    ? content.items.filter((item) => item.category === activeCategory)
+    : content.items;
 
   return (
     <>
       <section id="top" className="gallery-page-hero">
         <img
-          src={galleryPageContent.heroImage}
-          alt={galleryPageContent.heroAlt}
+          src={content.heroImage}
+          alt={content.heroAlt}
           loading="eager"
           fetchPriority="high"
         />
@@ -610,17 +680,17 @@ function GalleryPage() {
             transition={{ duration: 0.82, ease: 'easeOut' }}
             className="max-w-4xl"
           >
-            <p className="eyebrow mb-4 text-[#E8DCC8]">{galleryPageContent.eyebrow}</p>
-            <h1 className="gallery-page-title text-balance">{galleryPageContent.title}</h1>
+            <p className="eyebrow mb-4 text-[#E8DCC8]">{content.eyebrow}</p>
+            <h1 className="gallery-page-title text-balance">{content.title}</h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-white/78">
-              {galleryPageContent.text}
+              {content.text}
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <ButtonLink href="/" variant="outline">
-                {galleryPageContent.backLabel}
+                {content.backLabel}
               </ButtonLink>
               <ButtonLink href="/#contact" variant="light">
-                {galleryPageContent.contactLabel}
+                {content.contactLabel}
                 <ArrowRight size={17} aria-hidden="true" />
               </ButtonLink>
             </div>
@@ -632,7 +702,7 @@ function GalleryPage() {
         <div className="section-shell">
           {categories.length > 1 ? (
             <div className="gallery-page-filters" role="group" aria-label="Filter photos by category">
-              {[{ id: '', label: galleryPageContent.allLabel }, ...categories].map((category) => (
+              {[{ id: '', label: content.allLabel }, ...categories].map((category) => (
                 <button
                   key={category.id || 'all'}
                   type="button"
@@ -644,7 +714,11 @@ function GalleryPage() {
               ))}
             </div>
           ) : null}
-          <div className={`gallery-page-${galleryStyle}`} key={activeCategory || 'all'}>
+          <div
+            className={`gallery-page-${galleryStyle}`}
+            key={activeCategory || 'all'}
+            {...(isPortfolioPreview ? portfolioDragHandlers : {})}
+          >
             {visibleItems.map((item, index) => (
               <motion.figure
                 key={item.id}
@@ -654,6 +728,8 @@ function GalleryPage() {
                 viewport={{ once: true, margin: '-70px' }}
                 transition={{ duration: 0.62, delay: (index % 4) * 0.04 }}
                 className="gallery-page-item group"
+                data-id={item.id}
+                draggable={isPortfolioPreview || undefined}
                 data-shape={item.width > item.height ? 'landscape' : 'portrait'}
                 data-large={item.large ? 'true' : undefined}
                 style={{ '--ratio': item.width && item.height ? item.width / item.height : 1 }}

@@ -67,7 +67,6 @@
       #status { min-width: 9rem; color: var(--muted); font-size: 0.82rem; text-align: right; }
       #status.error { color: var(--danger); }
 
-      main { padding: 22px 24px 80px; }
       .hint { margin: 0 0 18px; color: var(--muted); font-size: 0.86rem; }
 
       #grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
@@ -145,10 +144,27 @@
       .card .actions .remove[data-armed='true'] { flex: 1; border-color: var(--danger); }
       #publish[data-armed='true'] { border-color: var(--gold); background: var(--gold); }
 
-      #preview { display: none; height: calc(100vh - 150px); }
-      #preview iframe { width: 100%; height: 100%; border: 1px solid var(--line); border-radius: 16px; background: #fff; }
-      body[data-view='preview'] #preview { display: block; }
+      main { height: calc(100vh - var(--header, 64px)); padding: 0; overflow: hidden; }
+      #split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); height: 100%; }
+      #order { overflow-y: auto; padding: 20px 20px 80px 24px; }
+      #preview { display: flex; flex-direction: column; min-width: 0; border-left: 1px solid var(--line); background: #ece7dc; }
+      #devices { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 10px; }
+      #devices small { color: var(--muted); }
+      #stage { position: relative; flex: 1; min-height: 0; overflow: hidden; margin: 0 14px 14px; }
+      #stage iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: #fff;
+        transform-origin: top left;
+      }
+      body[data-view='list'] #split,
+      body[data-view='preview'] #split { grid-template-columns: minmax(0, 1fr); }
+      body[data-view='list'] #preview,
       body[data-view='preview'] #order { display: none; }
+      body[data-view='split'] #grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
 
       #drop {
         position: fixed;
@@ -166,11 +182,12 @@
       body.dropping #drop { display: grid; }
     </style>
   </head>
-  <body data-view="order">
+  <body data-view="split">
     <header>
       <h1>Portfolio<small id="count"></small></h1>
       <div class="segmented" id="views">
-        <button type="button" data-view="order" aria-pressed="true">Σειρά</button>
+        <button type="button" data-view="split" aria-pressed="true">Μαζί</button>
+        <button type="button" data-view="list" aria-pressed="false">Λίστα</button>
         <button type="button" data-view="preview" aria-pressed="false">Προεπισκόπηση</button>
       </div>
       <div class="segmented" id="styles" aria-label="Στυλ"></div>
@@ -181,9 +198,10 @@
     </header>
 
     <main>
+      <div id="split">
       <section id="order">
         <p class="hint">
-          Σύρε τις φωτογραφίες για να αλλάξεις τη σειρά. Ρίξε αρχεία οπουδήποτε στη σελίδα για να προσθέσεις νέες.
+          Σύρε τις φωτογραφίες για να αλλάξεις τη σειρά — εδώ ή απευθείας μέσα στην προεπισκόπηση. Ρίξε αρχεία οπουδήποτε στη σελίδα για να προσθέσεις νέες.
           Το «Μεγάλη» μετράει στο στυλ Editorial· η «Λεζάντα» εμφανίζεται όταν περνά το ποντίκι πάνω από τη φωτογραφία.
         </p>
         <div id="categories">
@@ -192,7 +210,18 @@
         </div>
         <div id="grid"></div>
       </section>
-      <section id="preview"><iframe title="Προεπισκόπηση" data-src="http://127.0.0.1:__PREVIEW_PORT__/gallery"></iframe></section>
+      <section id="preview">
+        <div id="devices">
+          <div class="segmented" id="deviceButtons">
+            <button type="button" data-width="390" aria-pressed="false">Κινητό</button>
+            <button type="button" data-width="820" aria-pressed="false">Tablet</button>
+            <button type="button" data-width="1280" aria-pressed="true">Desktop</button>
+          </div>
+          <small id="deviceInfo"></small>
+        </div>
+        <div id="stage"><iframe title="Προεπισκόπηση" src="http://127.0.0.1:__PREVIEW_PORT__/gallery"></iframe></div>
+      </section>
+      </div>
     </main>
 
     <div id="drop">Άφησε τις φωτογραφίες εδώ</div>
@@ -202,7 +231,10 @@
       const els = Object.fromEntries(
         ['grid', 'count', 'styles', 'views', 'add', 'files', 'publish', 'status', 'categoryList'].map((id) => [id, document.getElementById(id)])
       );
-      const iframe = document.querySelector('#preview iframe');
+      const iframe = document.querySelector('#stage iframe');
+      const stage = document.getElementById('stage');
+      const PREVIEW_ORIGIN = new URL(iframe.src).origin;
+      let deviceWidth = 1280;
       let portfolio = { style: 'editorial', heroImage: '', items: [] };
       let git = { unsaved: 0, unpushedCommits: 0 };
       let dragId = null;
@@ -249,7 +281,36 @@
         return parts[0] || 'Δημοσιευμένο';
       }
 
+      function pushPreview() {
+        iframe.contentWindow?.postMessage({ type: 'loc-portfolio', portfolio }, PREVIEW_ORIGIN);
+      }
+
+      // The preview is a real browser viewport of the chosen width, scaled down to fit the pane.
+      function layoutPreview() {
+        const paneWidth = stage.clientWidth;
+        const paneHeight = stage.clientHeight;
+        if (!paneWidth || !paneHeight) return;
+        const scale = Math.min(1, paneWidth / deviceWidth);
+        iframe.style.width = `${deviceWidth}px`;
+        iframe.style.height = `${paneHeight / scale}px`;
+        iframe.style.transform = `scale(${scale})`;
+        iframe.style.left = `${Math.max(0, (paneWidth - deviceWidth * scale) / 2)}px`;
+        document.getElementById('deviceInfo').textContent = `${deviceWidth}px · ${Math.round(scale * 100)}%`;
+      }
+
+      function moveItem(dragId, targetId, before) {
+        const moved = portfolio.items.find((other) => other.id === dragId);
+        const rest = portfolio.items.filter((other) => other.id !== dragId);
+        const target = rest.findIndex((other) => other.id === targetId);
+        if (!moved || target < 0) return;
+        rest.splice(before ? target : target + 1, 0, moved);
+        portfolio.items = rest;
+        render();
+        save();
+      }
+
       async function save() {
+        pushPreview();
         try {
           const data = await api('/api/portfolio', {
             method: 'PUT',
@@ -320,6 +381,7 @@
         label.value = item.label;
         label.addEventListener('input', () => {
           item.label = label.value;
+          pushPreview();
           saveSoon();
         });
         // Dragging from inside the text field would move the card instead of selecting text.
@@ -396,14 +458,7 @@
         element.addEventListener('drop', (event) => {
           if (!dragId || dragId === item.id) return;
           event.preventDefault();
-          const before = element.classList.contains('drop-before');
-          const moved = portfolio.items.find((other) => other.id === dragId);
-          const rest = portfolio.items.filter((other) => other.id !== dragId);
-          const target = rest.findIndex((other) => other.id === item.id);
-          rest.splice(before ? target : target + 1, 0, moved);
-          portfolio.items = rest;
-          render();
-          save();
+          moveItem(dragId, item.id, element.classList.contains('drop-before'));
         });
 
         return element;
@@ -487,8 +542,28 @@
         if (!view) return;
         document.body.dataset.view = view;
         els.views.querySelectorAll('button').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.view === view)));
-        if (view === 'preview' && !iframe.src) iframe.src = iframe.dataset.src;
+        layoutPreview();
       });
+
+      document.getElementById('deviceButtons').addEventListener('click', (event) => {
+        const width = Number(event.target.dataset?.width);
+        if (!width) return;
+        deviceWidth = width;
+        event.currentTarget.querySelectorAll('button').forEach((button) => button.setAttribute('aria-pressed', String(button === event.target)));
+        layoutPreview();
+      });
+
+      window.addEventListener('message', (event) => {
+        if (event.origin !== PREVIEW_ORIGIN) return;
+        if (event.data?.type === 'loc-portfolio-ready') pushPreview();
+        if (event.data?.type === 'loc-portfolio-reorder') moveItem(event.data.dragId, event.data.targetId, event.data.before);
+      });
+
+      const fitHeader = () => document.documentElement.style.setProperty('--header', `${document.querySelector('header').offsetHeight}px`);
+      new ResizeObserver(() => {
+        fitHeader();
+        layoutPreview();
+      }).observe(document.body);
 
       confirmClick(els.publish, 'Πάτα ξανά για δημοσίευση', async () => {
         els.publish.disabled = true;
@@ -512,6 +587,9 @@
       renderStyles(data.styles);
       renderCategories();
       render();
+      fitHeader();
+      layoutPreview();
+      pushPreview();
       setStatus(pendingText());
     </script>
   </body>

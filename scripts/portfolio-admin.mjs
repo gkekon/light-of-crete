@@ -190,7 +190,14 @@ function sameOrigin(req) {
 
 const vite = await createViteServer({
   root: ROOT,
-  server: { port: PREVIEW_PORT, strictPort: true, host: '127.0.0.1' },
+  server: {
+    port: PREVIEW_PORT,
+    strictPort: true,
+    host: '127.0.0.1',
+    // The admin pushes edits into the preview itself; a reload on every save
+    // would lose the scroll position.
+    watch: { ignored: ['**/src/data/portfolio.json'] },
+  },
   logLevel: 'warn',
 });
 await vite.listen();

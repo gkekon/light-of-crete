@@ -72,6 +72,8 @@ This file is a working log of local project changes and decisions. It is not a d
 - Removing a photo in the admin only takes it out of the list; the image file is never deleted.
 - "Publish" commits the portfolio files and runs `git push`, which also sends any other unpushed commits. It refuses to push until the client gallery project answers under `/clients`.
 - The homepage gallery section is unchanged and still uses `gallerySection.items`.
+- Portfolio admin now opens split: the list on the left, a live responsive preview on the right (phone 390 / tablet 820 / desktop 1280, scaled to fit). Unsaved edits are pushed into the preview with `postMessage`, so it never reloads, and photos can be dragged into order inside the preview itself. The preview hooks in `App.jsx` run only on the Vite dev server (`import.meta.env.DEV`) and are not in the production bundle; `/gallery?portfolio-preview` on the dev server turns them on without the admin, for debugging.
+- Fixed the admin's per-photo buttons going dead after the first save, and replaced native `confirm()` dialogs (blocked in embedded browsers) with a second click.
 - Added optional category filters on `/gallery` (All / Couples / Family / Maternity / Solo / Groups). Each photo's category and the category list are set in the portfolio admin; only categories with photos show as buttons. `/gallery?category=couples` opens with that filter on. The first category per photo was guessed from its old label and should be reviewed.
 
 ## Notes
