@@ -142,6 +142,8 @@
       }
       .card .actions button[aria-pressed='true'] { border-color: var(--gold); background: var(--sand); }
       .card .actions .remove { flex: 0 0 30px; color: var(--danger); }
+      .card .actions .remove[data-armed='true'] { flex: 1; border-color: var(--danger); }
+      #publish[data-armed='true'] { border-color: var(--gold); background: var(--gold); }
 
       #preview { display: none; height: calc(100vh - 150px); }
       #preview iframe { width: 100%; height: 100%; border: 1px solid var(--line); border-radius: 16px; background: #fff; }
@@ -213,6 +215,28 @@
         return data;
       }
 
+      // Native confirm() dialogs are blocked in some embedded browsers, so a
+      // risky button asks for a second click instead.
+      function confirmClick(button, armedText, action) {
+        const idleText = button.textContent;
+        let timer = null;
+        const disarm = () => {
+          clearTimeout(timer);
+          button.dataset.armed = '';
+          button.textContent = idleText;
+        };
+        button.addEventListener('click', () => {
+          if (button.dataset.armed === 'true') {
+            disarm();
+            action();
+            return;
+          }
+          button.dataset.armed = 'true';
+          button.textContent = armedText;
+          timer = setTimeout(disarm, 4000);
+        });
+      }
+
       function setStatus(text, error = false) {
         els.status.textContent = text;
         els.status.classList.toggle('error', error);
@@ -232,7 +256,7 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(portfolio),
           });
-          portfolio = data.portfolio;
+          // The cards hold references to these item objects, so they are not replaced.
           git = data.git;
           setStatus(`Αποθηκεύτηκε · ${pendingText()}`);
         } catch (error) {
@@ -340,8 +364,7 @@
         remove.className = 'remove';
         remove.textContent = '✕';
         remove.title = 'Αφαίρεση από το portfolio (το αρχείο μένει στον δίσκο)';
-        remove.addEventListener('click', () => {
-          if (!confirm('Να βγει αυτή η φωτογραφία από το portfolio; Το αρχείο δεν σβήνεται.')) return;
+        confirmClick(remove, 'Σίγουρα;', () => {
           portfolio.items = portfolio.items.filter((other) => other.id !== item.id);
           render();
           save();
@@ -467,8 +490,7 @@
         if (view === 'preview' && !iframe.src) iframe.src = iframe.dataset.src;
       });
 
-      els.publish.addEventListener('click', async () => {
-        if (!confirm('Να δημοσιευτούν οι αλλαγές στο lightofcrete.com; Θα είναι ζωντανές σε 1–2 λεπτά.')) return;
+      confirmClick(els.publish, 'Πάτα ξανά για δημοσίευση', async () => {
         els.publish.disabled = true;
         setStatus('Δημοσίευση…');
         try {
@@ -479,7 +501,6 @@
           setStatus('Στάλθηκε · ζωντανό σε 1–2 λεπτά');
         } catch (error) {
           setStatus(error.message, true);
-          alert(error.message);
         } finally {
           els.publish.disabled = false;
         }
