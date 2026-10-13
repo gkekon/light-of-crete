@@ -109,6 +109,27 @@
         font-size: 0.82rem;
       }
       .card input[type='text']:focus { border-color: var(--gold); outline: none; background: #fff; }
+      .card select {
+        width: 100%;
+        margin-top: 6px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 4px 6px;
+        background: #fff;
+        font: inherit;
+        font-size: 0.8rem;
+      }
+      .card select.empty { color: var(--muted); }
+      #categories { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 18px; }
+      #categories label { color: var(--muted); font-size: 0.86rem; }
+      #categories input {
+        flex: 1 1 320px;
+        max-width: 560px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 7px 10px;
+        background: #fff;
+      }
       .card .actions { display: flex; gap: 4px; margin-top: 7px; }
       .card .actions button {
         flex: 1;
@@ -163,6 +184,10 @@
           Σύρε τις φωτογραφίες για να αλλάξεις τη σειρά. Ρίξε αρχεία οπουδήποτε στη σελίδα για να προσθέσεις νέες.
           Το «Μεγάλη» μετράει στο στυλ Editorial· η «Λεζάντα» εμφανίζεται όταν περνά το ποντίκι πάνω από τη φωτογραφία.
         </p>
+        <div id="categories">
+          <label for="categoryList">Κατηγορίες (με κόμμα):</label>
+          <input id="categoryList" type="text" placeholder="Couples, Family, Maternity, Solo" />
+        </div>
         <div id="grid"></div>
       </section>
       <section id="preview"><iframe title="Προεπισκόπηση" data-src="http://127.0.0.1:__PREVIEW_PORT__/gallery"></iframe></section>
@@ -173,7 +198,7 @@
     <script type="module">
       const STYLE_LABELS = { editorial: 'Editorial', masonry: 'Masonry', justified: 'Justified' };
       const els = Object.fromEntries(
-        ['grid', 'count', 'styles', 'views', 'add', 'files', 'publish', 'status'].map((id) => [id, document.getElementById(id)])
+        ['grid', 'count', 'styles', 'views', 'add', 'files', 'publish', 'status', 'categoryList'].map((id) => [id, document.getElementById(id)])
       );
       const iframe = document.querySelector('#preview iframe');
       let portfolio = { style: 'editorial', heroImage: '', items: [] };
@@ -277,6 +302,16 @@
         label.addEventListener('mousedown', () => (element.draggable = false));
         label.addEventListener('blur', () => (element.draggable = true));
 
+        const category = document.createElement('select');
+        category.append(new Option('Χωρίς κατηγορία', ''), ...(portfolio.categories || []).map((entry) => new Option(entry.label, entry.id)));
+        category.value = item.category || '';
+        category.classList.toggle('empty', !category.value);
+        category.addEventListener('change', () => {
+          item.category = category.value;
+          category.classList.toggle('empty', !category.value);
+          save();
+        });
+
         const actions = document.createElement('div');
         actions.className = 'actions';
 
@@ -313,7 +348,7 @@
         });
 
         actions.append(large, hero, remove);
-        body.append(label, actions);
+        body.append(label, category, actions);
         element.append(img, order, badges, body);
 
         element.addEventListener('dragstart', (event) => {
@@ -378,6 +413,29 @@
         if (failed.length) setStatus(`Δεν διαβάστηκαν: ${failed.join(', ')}`, true);
       }
 
+      const slugify = (value) =>
+        value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+
+      // Renaming keeps a category's photos when the position in the list stays the same.
+      els.categoryList.addEventListener('change', async () => {
+        const labels = els.categoryList.value.split(',').map((label) => label.trim()).filter(Boolean);
+        const previous = portfolio.categories || [];
+        const next = labels.map((label) => ({ id: slugify(label), label }));
+        const renamed = new Map();
+        if (next.length === previous.length) previous.forEach((entry, index) => renamed.set(entry.id, next[index].id));
+        portfolio.items.forEach((item) => {
+          if (renamed.has(item.category)) item.category = renamed.get(item.category);
+        });
+        portfolio.categories = next;
+        await save();
+        renderCategories();
+        render();
+      });
+
+      function renderCategories() {
+        els.categoryList.value = (portfolio.categories || []).map((entry) => entry.label).join(', ');
+      }
+
       els.add.addEventListener('click', () => els.files.click());
       els.files.addEventListener('change', () => {
         upload(els.files.files);
@@ -431,6 +489,7 @@
       portfolio = data.portfolio;
       git = data.git;
       renderStyles(data.styles);
+      renderCategories();
       render();
       setStatus(pendingText());
     </script>

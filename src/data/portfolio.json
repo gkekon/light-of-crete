@@ -1,6 +1,28 @@
 {
   "style": "editorial",
   "heroImage": "/images/gallery-couple-coast.webp",
+  "categories": [
+    {
+      "id": "couples",
+      "label": "Couples"
+    },
+    {
+      "id": "family",
+      "label": "Family"
+    },
+    {
+      "id": "maternity",
+      "label": "Maternity"
+    },
+    {
+      "id": "solo",
+      "label": "Solo"
+    },
+    {
+      "id": "groups",
+      "label": "Groups"
+    }
+  ],
   "items": [
     {
       "id": "family-mother",
@@ -9,7 +31,8 @@
       "label": "Family",
       "width": 1400,
       "height": 1980,
-      "large": true
+      "large": true,
+      "category": "family"
     },
     {
       "id": "editorial-redhair",
@@ -18,7 +41,8 @@
       "label": "Editorial portrait",
       "width": 1400,
       "height": 1980,
-      "large": false
+      "large": false,
+      "category": "solo"
     },
     {
       "id": "water-overhead",
@@ -27,7 +51,8 @@
       "label": "Beach water portrait",
       "width": 1500,
       "height": 1000,
-      "large": false
+      "large": false,
+      "category": "solo"
     },
     {
       "id": "family-water-play",
@@ -36,7 +61,8 @@
       "label": "Family memories",
       "width": 1500,
       "height": 1000,
-      "large": false
+      "large": false,
+      "category": "family"
     },
     {
       "id": "maternity-soft",
@@ -45,7 +71,8 @@
       "label": "Maternity",
       "width": 1400,
       "height": 1980,
-      "large": false
+      "large": false,
+      "category": "maternity"
     },
     {
       "id": "couple-sunset-walk",
@@ -54,7 +81,8 @@
       "label": "Sunset couple",
       "width": 1500,
       "height": 1000,
-      "large": false
+      "large": false,
+      "category": "couples"
     },
     {
       "id": "family-beach-run",
@@ -63,7 +91,8 @@
       "label": "Family beach",
       "width": 1500,
       "height": 1000,
-      "large": true
+      "large": true,
+      "category": "family"
     },
     {
       "id": "editorial-blackwhite-dress",
@@ -72,7 +101,8 @@
       "label": "Editorial portrait",
       "width": 1400,
       "height": 1980,
-      "large": false
+      "large": false,
+      "category": "solo"
     },
     {
       "id": "swimwear-clouds",
@@ -81,7 +111,8 @@
       "label": "Swimwear",
       "width": 1500,
       "height": 1000,
-      "large": false
+      "large": false,
+      "category": "solo"
     },
     {
       "id": "couple-wide-shore",
@@ -90,7 +121,8 @@
       "label": "Coastal story",
       "width": 1500,
       "height": 1000,
-      "large": false
+      "large": false,
+      "category": "couples"
     },
     {
       "id": "couple-orange-smoke",
@@ -99,7 +131,8 @@
       "label": "Cinematic couple",
       "width": 1500,
       "height": 1000,
-      "large": false
+      "large": false,
+      "category": "couples"
     },
     {
       "id": "event-portrait",
@@ -108,7 +141,8 @@
       "label": "Private event",
       "width": 1400,
       "height": 1980,
-      "large": false
+      "large": false,
+      "category": "groups"
     },
     {
       "id": "couple-lagoon-smile",
@@ -117,7 +151,8 @@
       "label": "Couple story",
       "width": 1500,
       "height": 1000,
-      "large": true
+      "large": true,
+      "category": "couples"
     },
     {
       "id": "solo-hat-closeup",
@@ -126,7 +161,8 @@
       "label": "Solo portrait",
       "width": 1400,
       "height": 1980,
-      "large": false
+      "large": false,
+      "category": "solo"
     },
     {
       "id": "couple-kiss-water",
@@ -135,7 +171,8 @@
       "label": "Romance",
       "width": 1500,
       "height": 1000,
-      "large": false
+      "large": false,
+      "category": "couples"
     },
     {
       "id": "beach-walk",
@@ -144,7 +181,8 @@
       "label": "Solo traveler",
       "width": 1400,
       "height": 1980,
-      "large": false
+      "large": false,
+      "category": "solo"
     },
     {
       "id": "couple-wood-bridge",
@@ -153,7 +191,8 @@
       "label": "Quiet moment",
       "width": 1500,
       "height": 1000,
-      "large": false
+      "large": false,
+      "category": "couples"
     },
     {
       "id": "water-portrait",
@@ -162,7 +201,8 @@
       "label": "Nature portrait",
       "width": 1400,
       "height": 1980,
-      "large": false
+      "large": false,
+      "category": "solo"
     },
     {
       "id": "couple-garden",
@@ -171,7 +211,8 @@
       "label": "Garden couple",
       "width": 1500,
       "height": 1000,
-      "large": true
+      "large": true,
+      "category": "couples"
     },
     {
       "id": "couple-golden-close",
@@ -180,7 +221,8 @@
       "label": "Golden hour",
       "width": 1400,
       "height": 2100,
-      "large": false
+      "large": false,
+      "category": "couples"
     },
     {
       "id": "boudoir-light",
@@ -189,7 +231,8 @@
       "label": "Atmospheric boudoir",
       "width": 1400,
       "height": 1980,
-      "large": false
+      "large": false,
+      "category": "solo"
     },
     {
       "id": "couple-coast",
@@ -198,7 +241,8 @@
       "label": "Coastal couple",
       "width": 1500,
       "height": 1000,
-      "large": false
+      "large": false,
+      "category": "couples"
     },
     {
       "id": "couple-dunes",
@@ -207,7 +251,8 @@
       "label": "Dune story",
       "width": 1500,
       "height": 1000,
-      "large": false
+      "large": false,
+      "category": "couples"
     },
     {
       "id": "couple-mountain",
@@ -216,7 +261,8 @@
       "label": "Mountain romance",
       "width": 1800,
       "height": 1200,
-      "large": false
+      "large": false,
+      "category": "couples"
     },
     {
       "id": "couple-blackwhite",
@@ -225,7 +271,8 @@
       "label": "Black and white",
       "width": 1600,
       "height": 2397,
-      "large": true
+      "large": true,
+      "category": "couples"
     },
     {
       "id": "maternity-shadow",
@@ -234,7 +281,8 @@
       "label": "Maternity",
       "width": 1400,
       "height": 1980,
-      "large": false
+      "large": false,
+      "category": "maternity"
     },
     {
       "id": "solo-sand-dress",
@@ -243,7 +291,8 @@
       "label": "Solo portrait",
       "width": 1500,
       "height": 1000,
-      "large": false
+      "large": false,
+      "category": "solo"
     },
     {
       "id": "solo-water",
@@ -252,7 +301,8 @@
       "label": "Water portrait",
       "width": 1400,
       "height": 1980,
-      "large": false
+      "large": false,
+      "category": "solo"
     },
     {
       "id": "swimwear-stone",
@@ -261,7 +311,8 @@
       "label": "Swimwear",
       "width": 1400,
       "height": 1980,
-      "large": false
+      "large": false,
+      "category": "solo"
     }
   ]
 }

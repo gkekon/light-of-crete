@@ -297,6 +297,8 @@ export const galleryPageContent = {
   // `npm run portfolio` and stored in portfolio.json.
   heroImage: portfolio.heroImage,
   style: portfolio.style,
+  allLabel: 'All',
+  categories: portfolio.categories || [],
   items: portfolio.items,
 };
 

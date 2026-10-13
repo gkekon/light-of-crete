@@ -360,6 +360,36 @@ select {
   }
 }
 
+.gallery-page-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 2.25rem;
+}
+
+.gallery-page-filters button {
+  border: 1px solid rgba(74, 81, 64, 0.16);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 0.6rem 1.15rem;
+  color: #222222;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.gallery-page-filters button:hover {
+  border-color: rgba(74, 81, 64, 0.4);
+}
+
+.gallery-page-filters button[aria-pressed='true'] {
+  border-color: #4a5140;
+  background: #4a5140;
+  color: #ffffff;
+}
+
 /* Editorial: a dense grid where portraits take one column, landscapes two,
    and photos marked "large" in the portfolio admin take double that. */
 .gallery-page-body .section-shell {

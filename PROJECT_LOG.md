@@ -72,6 +72,7 @@ This file is a working log of local project changes and decisions. It is not a d
 - Removing a photo in the admin only takes it out of the list; the image file is never deleted.
 - "Publish" commits the portfolio files and runs `git push`, which also sends any other unpushed commits. It refuses to push until the client gallery project answers under `/clients`.
 - The homepage gallery section is unchanged and still uses `gallerySection.items`.
+- Added optional category filters on `/gallery` (All / Couples / Family / Maternity / Solo / Groups). Each photo's category and the category list are set in the portfolio admin; only categories with photos show as buttons. `/gallery?category=couples` opens with that filter on. The first category per photo was guessed from its old label and should be reviewed.
 
 ## Notes
 

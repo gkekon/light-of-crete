@@ -52,7 +52,28 @@ function run(cmd, args) {
 
 const readPortfolio = async () => JSON.parse(await fs.readFile(DATA, 'utf8'));
 
+function slugify(value) {
+  return String(value || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function cleanCategories(input) {
+  const seen = new Set();
+  return (Array.isArray(input) ? input : [])
+    .map((category) => ({
+      id: slugify(category.id || category.label),
+      label: String(category.label || '').trim(),
+    }))
+    .filter((category) => category.id && category.label && !seen.has(category.id) && seen.add(category.id));
+}
+
 function cleanPortfolio(input) {
+  const categories = cleanCategories(input.categories);
+  const categoryIds = new Set(categories.map((category) => category.id));
   const items = (Array.isArray(input.items) ? input.items : []).map((item) => ({
     id: String(item.id),
     src: String(item.src),
@@ -61,6 +82,7 @@ function cleanPortfolio(input) {
     width: Number(item.width) || 0,
     height: Number(item.height) || 0,
     large: Boolean(item.large),
+    category: categoryIds.has(item.category) ? item.category : '',
   }));
   if (new Set(items.map((item) => item.id)).size !== items.length) {
     throw new Error('Δύο φωτογραφίες έχουν το ίδιο id.');
@@ -74,6 +96,7 @@ function cleanPortfolio(input) {
   return {
     style: STYLES.includes(input.style) ? input.style : 'editorial',
     heroImage,
+    categories,
     items,
   };
 }
@@ -132,6 +155,7 @@ const routes = {
         width: info.width,
         height: info.height,
         large: false,
+        category: '',
       },
     };
   },

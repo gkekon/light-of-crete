@@ -579,6 +579,18 @@ function GalleryPage() {
   const galleryStyle = galleryStyles.includes(galleryPageContent.style)
     ? galleryPageContent.style
     : 'masonry';
+  // Only categories that actually have photos become filter buttons.
+  const categories = galleryPageContent.categories.filter((category) =>
+    galleryPageContent.items.some((item) => item.category === category.id),
+  );
+  const [activeCategory, setActiveCategory] = useState(() => {
+    if (typeof window === 'undefined') return '';
+    const requested = new URLSearchParams(window.location.search).get('category') || '';
+    return categories.some((category) => category.id === requested) ? requested : '';
+  });
+  const visibleItems = activeCategory
+    ? galleryPageContent.items.filter((item) => item.category === activeCategory)
+    : galleryPageContent.items;
 
   return (
     <>
@@ -618,8 +630,22 @@ function GalleryPage() {
 
       <section className="gallery-page-body px-4 py-20 sm:py-28">
         <div className="section-shell">
-          <div className={`gallery-page-${galleryStyle}`}>
-            {galleryPageContent.items.map((item, index) => (
+          {categories.length > 1 ? (
+            <div className="gallery-page-filters" role="group" aria-label="Filter photos by category">
+              {[{ id: '', label: galleryPageContent.allLabel }, ...categories].map((category) => (
+                <button
+                  key={category.id || 'all'}
+                  type="button"
+                  aria-pressed={activeCategory === category.id}
+                  onClick={() => setActiveCategory(category.id)}
+                >
+                  {category.label}
+                </button>
+              ))}
+            </div>
+          ) : null}
+          <div className={`gallery-page-${galleryStyle}`} key={activeCategory || 'all'}>
+            {visibleItems.map((item, index) => (
               <motion.figure
                 key={item.id}
                 variants={fadeUp}
