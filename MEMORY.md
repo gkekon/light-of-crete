@@ -49,6 +49,7 @@
 ## Current Gallery Page Setup
 
 - The public portfolio page lives at `/gallery`.
+- Its photos, order, layout style and cover are edited with `npm run portfolio` and stored in `src/data/portfolio.json`; do not hand-edit the list in `siteContent.js`.
 - The private client gallery (separate Netlify project) is proxied at `/clients`; never put anything else under `/clients` or `/gallery/api`.
 - Public title: `Pictures from Photoshoots in Crete`.
 - Homepage gallery CTA: `See more pictures`.

@@ -64,6 +64,15 @@ This file is a working log of local project changes and decisions. It is not a d
 - Refreshed the relative dates of the older reviews and pointed "Read all reviews on Google" at the Maps listing instead of a search.
 - `robots.txt` disallows `/clients/`; `/gallery` added to the sitemap.
 
+## 2026-10-13
+
+- Added a local portfolio admin for the `/gallery` page: `npm run portfolio` → `http://127.0.0.1:4600` (`scripts/portfolio-admin.mjs` + `.html`). Add photos (button or drag from Finder), drag to reorder, mark photos as "large", pick the cover image, switch layout style, live preview, publish.
+- Photos, order, style and cover now live in `src/data/portfolio.json`; `galleryPageContent` reads from it. New photos are converted to 1600px WebP in `public/images/portfolio/`.
+- Three layout styles for `/gallery`: `editorial` (default, chosen by Konstantinos), `masonry` (the previous look) and `justified`.
+- Removing a photo in the admin only takes it out of the list; the image file is never deleted.
+- "Publish" commits the portfolio files and runs `git push`, which also sends any other unpushed commits. It refuses to push until the client gallery project answers under `/clients`.
+- The homepage gallery section is unchanged and still uses `gallerySection.items`.
+
 ## Notes
 
 - Do not deploy, push, or change Netlify/GitHub settings unless Konstantinos explicitly asks.

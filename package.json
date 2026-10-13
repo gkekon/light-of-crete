@@ -7,7 +7,8 @@
     "dev": "vite --host 0.0.0.0",
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0",
-    "optimize:images": "node scripts/optimize-images.mjs"
+    "optimize:images": "node scripts/optimize-images.mjs",
+    "portfolio": "node scripts/portfolio-admin.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "latest",
@@ -20,6 +21,6 @@
     "vite": "latest"
   },
   "devDependencies": {
-    "sharp": "latest"
+    "sharp": "^0.35.5"
   }
 }

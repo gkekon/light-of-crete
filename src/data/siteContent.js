@@ -1,3 +1,5 @@
+import portfolio from './portfolio.json';
+
 export const navItems = [
   { id: 'photoshoots', label: 'Photoshoots', href: '#photoshoots' },
   { id: 'photo-video', label: 'Photo + Video', href: '#photo-video' },
@@ -290,59 +292,12 @@ export const galleryPageContent = {
   text: 'A growing collection of natural, elegant and cinematic photoshoot moments across Crete: couples, families, solo travelers, maternity, beach portraits and private experiences.',
   backLabel: 'Back to homepage',
   contactLabel: 'Book your photoshoot',
-  heroImage: '/images/gallery-couple-coast.webp',
-  heroAlt: 'A cinematic couple photoshoot by the Cretan coast.',
-  items: [
-    ...gallerySection.items,
-    {
-      id: 'couple-coast',
-      src: '/images/gallery-couple-coast.webp',
-      alt: 'A couple photographed along the Cretan coast in soft Mediterranean light.',
-      label: 'Coastal couple',
-    },
-    {
-      id: 'couple-dunes',
-      src: '/images/gallery-couple-dunes.webp',
-      alt: 'A romantic couple photoshoot among warm coastal dunes.',
-      label: 'Dune story',
-    },
-    {
-      id: 'couple-mountain',
-      src: '/images/gallery-couple-mountain.webp',
-      alt: 'A black and white couple portrait with mountains in the background.',
-      label: 'Mountain romance',
-    },
-    {
-      id: 'couple-blackwhite',
-      src: '/images/gallery-couple-blackwhite.webp',
-      alt: 'A timeless black and white couple photoshoot moment.',
-      label: 'Black and white',
-    },
-    {
-      id: 'maternity-shadow',
-      src: '/images/gallery-maternity-shadow.webp',
-      alt: 'An elegant maternity photoshoot with soft shadow and warm tones.',
-      label: 'Maternity',
-    },
-    {
-      id: 'solo-sand-dress',
-      src: '/images/gallery-solo-sand-dress.webp',
-      alt: 'A solo traveler portrait lying peacefully on warm Cretan sand.',
-      label: 'Solo portrait',
-    },
-    {
-      id: 'solo-water',
-      src: '/images/gallery-solo-water.webp',
-      alt: 'A solo water portrait with cinematic Mediterranean atmosphere.',
-      label: 'Water portrait',
-    },
-    {
-      id: 'swimwear-stone',
-      src: '/images/gallery-swimwear-stone.webp',
-      alt: 'A tasteful swimwear portrait by the rocks and sea.',
-      label: 'Swimwear',
-    },
-  ],
+  heroAlt: 'A cinematic photoshoot moment in Crete.',
+  // Photos, their order, the layout style and the cover image are edited with
+  // `npm run portfolio` and stored in portfolio.json.
+  heroImage: portfolio.heroImage,
+  style: portfolio.style,
+  items: portfolio.items,
 };
 
 export const packagesSection = {

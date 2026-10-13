@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="el">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio · Light of Crete</title>
+    <style>
+      :root {
+        --bg: #f8f5ef;
+        --card: #ffffff;
+        --ink: #222222;
+        --muted: #6f6a60;
+        --line: rgba(74, 81, 64, 0.16);
+        --olive: #4a5140;
+        --sand: #e8dcc8;
+        --gold: #b08d57;
+        --danger: #a4452f;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font: 15px/1.45 -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      }
+      button, input { font: inherit; color: inherit; }
+      button { cursor: pointer; }
+
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px 20px;
+        padding: 14px 24px;
+        border-bottom: 1px solid var(--line);
+        background: rgba(248, 245, 239, 0.92);
+        backdrop-filter: blur(14px);
+      }
+      header h1 { margin: 0 auto 0 0; font-size: 1.05rem; font-weight: 650; }
+      header h1 small { display: block; color: var(--muted); font-size: 0.78rem; font-weight: 400; }
+
+      .segmented { display: inline-flex; padding: 3px; border-radius: 999px; background: var(--sand); }
+      .segmented button {
+        border: 0;
+        border-radius: 999px;
+        padding: 7px 15px;
+        background: transparent;
+        font-weight: 600;
+        font-size: 0.86rem;
+      }
+      .segmented button[aria-pressed='true'] { background: var(--card); box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12); }
+
+      .btn {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 8px 17px;
+        background: var(--card);
+        font-weight: 600;
+        font-size: 0.86rem;
+      }
+      .btn.primary { border-color: var(--olive); background: var(--olive); color: #fff; }
+      .btn:disabled { opacity: 0.5; cursor: default; }
+
+      #status { min-width: 9rem; color: var(--muted); font-size: 0.82rem; text-align: right; }
+      #status.error { color: var(--danger); }
+
+      main { padding: 22px 24px 80px; }
+      .hint { margin: 0 0 18px; color: var(--muted); font-size: 0.86rem; }
+
+      #grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
+      .card {
+        position: relative;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--card);
+        cursor: grab;
+        transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+      }
+      .card.dragging { opacity: 0.35; }
+      .card.drop-before { box-shadow: -4px 0 0 var(--gold); }
+      .card.drop-after { box-shadow: 4px 0 0 var(--gold); }
+      .card img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; pointer-events: none; }
+      .card .order {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        min-width: 26px;
+        border-radius: 999px;
+        padding: 2px 8px;
+        background: rgba(34, 34, 34, 0.72);
+        color: #fff;
+        font-size: 0.74rem;
+        font-weight: 700;
+        text-align: center;
+      }
+      .card .badges { position: absolute; top: 8px; right: 8px; display: flex; gap: 4px; }
+      .card .badge { border-radius: 999px; padding: 2px 8px; background: var(--gold); color: #fff; font-size: 0.7rem; font-weight: 700; }
+      .card .body { padding: 9px 10px 10px; }
+      .card input[type='text'] {
+        width: 100%;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        padding: 4px 6px;
+        background: var(--bg);
+        font-size: 0.82rem;
+      }
+      .card input[type='text']:focus { border-color: var(--gold); outline: none; background: #fff; }
+      .card .actions { display: flex; gap: 4px; margin-top: 7px; }
+      .card .actions button {
+        flex: 1;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 4px 2px;
+        background: #fff;
+        font-size: 0.72rem;
+        font-weight: 600;
+      }
+      .card .actions button[aria-pressed='true'] { border-color: var(--gold); background: var(--sand); }
+      .card .actions .remove { flex: 0 0 30px; color: var(--danger); }
+
+      #preview { display: none; height: calc(100vh - 150px); }
+      #preview iframe { width: 100%; height: 100%; border: 1px solid var(--line); border-radius: 16px; background: #fff; }
+      body[data-view='preview'] #preview { display: block; }
+      body[data-view='preview'] #order { display: none; }
+
+      #drop {
+        position: fixed;
+        inset: 12px;
+        z-index: 20;
+        display: none;
+        place-items: center;
+        border: 3px dashed var(--gold);
+        border-radius: 24px;
+        background: rgba(248, 245, 239, 0.9);
+        font-size: 1.3rem;
+        font-weight: 650;
+        pointer-events: none;
+      }
+      body.dropping #drop { display: grid; }
+    </style>
+  </head>
+  <body data-view="order">
+    <header>
+      <h1>Portfolio<small id="count"></small></h1>
+      <div class="segmented" id="views">
+        <button type="button" data-view="order" aria-pressed="true">Σειρά</button>
+        <button type="button" data-view="preview" aria-pressed="false">Προεπισκόπηση</button>
+      </div>
+      <div class="segmented" id="styles" aria-label="Στυλ"></div>
+      <button class="btn" type="button" id="add">+ Φωτογραφίες</button>
+      <input id="files" type="file" accept="image/*" multiple hidden />
+      <button class="btn primary" type="button" id="publish">Δημοσίευση</button>
+      <span id="status"></span>
+    </header>
+
+    <main>
+      <section id="order">
+        <p class="hint">
+          Σύρε τις φωτογραφίες για να αλλάξεις τη σειρά. Ρίξε αρχεία οπουδήποτε στη σελίδα για να προσθέσεις νέες.
+          Το «Μεγάλη» μετράει στο στυλ Editorial· η «Λεζάντα» εμφανίζεται όταν περνά το ποντίκι πάνω από τη φωτογραφία.
+        </p>
+        <div id="grid"></div>
+      </section>
+      <section id="preview"><iframe title="Προεπισκόπηση" data-src="http://127.0.0.1:__PREVIEW_PORT__/gallery"></iframe></section>
+    </main>
+
+    <div id="drop">Άφησε τις φωτογραφίες εδώ</div>
+
+    <script type="module">
+      const STYLE_LABELS = { editorial: 'Editorial', masonry: 'Masonry', justified: 'Justified' };
+      const els = Object.fromEntries(
+        ['grid', 'count', 'styles', 'views', 'add', 'files', 'publish', 'status'].map((id) => [id, document.getElementById(id)])
+      );
+      const iframe = document.querySelector('#preview iframe');
+      let portfolio = { style: 'editorial', heroImage: '', items: [] };
+      let git = { unsaved: 0, unpushedCommits: 0 };
+      let dragId = null;
+      let saveTimer = null;
+
+      async function api(path, options = {}) {
+        const response = await fetch(path, options);
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(data.error || `Σφάλμα ${response.status}`);
+        return data;
+      }
+
+      function setStatus(text, error = false) {
+        els.status.textContent = text;
+        els.status.classList.toggle('error', error);
+      }
+
+      function pendingText() {
+        const parts = [];
+        if (git.unsaved) parts.push('αλλαγές που δεν έχουν δημοσιευτεί');
+        else if (git.unpushedCommits) parts.push('έτοιμο για δημοσίευση');
+        return parts[0] || 'Δημοσιευμένο';
+      }
+
+      async function save() {
+        try {
+          const data = await api('/api/portfolio', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(portfolio),
+          });
+          portfolio = data.portfolio;
+          git = data.git;
+          setStatus(`Αποθηκεύτηκε · ${pendingText()}`);
+        } catch (error) {
+          setStatus(error.message, true);
+        }
+      }
+
+      // Typing in a caption should not write the file on every keystroke.
+      function saveSoon() {
+        clearTimeout(saveTimer);
+        saveTimer = setTimeout(save, 500);
+      }
+
+      function renderStyles(styles) {
+        els.styles.replaceChildren(
+          ...styles.map((style) => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.textContent = STYLE_LABELS[style] || style;
+            button.setAttribute('aria-pressed', String(portfolio.style === style));
+            button.addEventListener('click', () => {
+              portfolio.style = style;
+              renderStyles(styles);
+              save();
+            });
+            return button;
+          })
+        );
+      }
+
+      function card(item, index) {
+        const element = document.createElement('div');
+        element.className = 'card';
+        element.draggable = true;
+        element.dataset.id = item.id;
+
+        const img = document.createElement('img');
+        img.src = item.src;
+        img.loading = 'lazy';
+        img.alt = '';
+
+        const order = document.createElement('span');
+        order.className = 'order';
+        order.textContent = index + 1;
+
+        const badges = document.createElement('div');
+        badges.className = 'badges';
+        if (portfolio.heroImage === item.src) {
+          const badge = document.createElement('span');
+          badge.className = 'badge';
+          badge.textContent = 'Εξώφυλλο';
+          badges.append(badge);
+        }
+
+        const body = document.createElement('div');
+        body.className = 'body';
+
+        const label = document.createElement('input');
+        label.type = 'text';
+        label.placeholder = 'Λεζάντα (προαιρετική)';
+        label.value = item.label;
+        label.addEventListener('input', () => {
+          item.label = label.value;
+          saveSoon();
+        });
+        // Dragging from inside the text field would move the card instead of selecting text.
+        label.addEventListener('mousedown', () => (element.draggable = false));
+        label.addEventListener('blur', () => (element.draggable = true));
+
+        const actions = document.createElement('div');
+        actions.className = 'actions';
+
+        const large = document.createElement('button');
+        large.type = 'button';
+        large.textContent = 'Μεγάλη';
+        large.setAttribute('aria-pressed', String(item.large));
+        large.addEventListener('click', () => {
+          item.large = !item.large;
+          render();
+          save();
+        });
+
+        const hero = document.createElement('button');
+        hero.type = 'button';
+        hero.textContent = 'Εξώφυλλο';
+        hero.setAttribute('aria-pressed', String(portfolio.heroImage === item.src));
+        hero.addEventListener('click', () => {
+          portfolio.heroImage = item.src;
+          render();
+          save();
+        });
+
+        const remove = document.createElement('button');
+        remove.type = 'button';
+        remove.className = 'remove';
+        remove.textContent = '✕';
+        remove.title = 'Αφαίρεση από το portfolio (το αρχείο μένει στον δίσκο)';
+        remove.addEventListener('click', () => {
+          if (!confirm('Να βγει αυτή η φωτογραφία από το portfolio; Το αρχείο δεν σβήνεται.')) return;
+          portfolio.items = portfolio.items.filter((other) => other.id !== item.id);
+          render();
+          save();
+        });
+
+        actions.append(large, hero, remove);
+        body.append(label, actions);
+        element.append(img, order, badges, body);
+
+        element.addEventListener('dragstart', (event) => {
+          dragId = item.id;
+          event.dataTransfer.effectAllowed = 'move';
+          event.dataTransfer.setData('text/plain', item.id);
+          requestAnimationFrame(() => element.classList.add('dragging'));
+        });
+        element.addEventListener('dragend', () => {
+          dragId = null;
+          document.querySelectorAll('.card').forEach((other) => other.classList.remove('dragging', 'drop-before', 'drop-after'));
+        });
+        element.addEventListener('dragover', (event) => {
+          if (!dragId || dragId === item.id) return;
+          event.preventDefault();
+          const box = element.getBoundingClientRect();
+          const before = event.clientX < box.left + box.width / 2;
+          element.classList.toggle('drop-before', before);
+          element.classList.toggle('drop-after', !before);
+        });
+        element.addEventListener('dragleave', () => element.classList.remove('drop-before', 'drop-after'));
+        element.addEventListener('drop', (event) => {
+          if (!dragId || dragId === item.id) return;
+          event.preventDefault();
+          const before = element.classList.contains('drop-before');
+          const moved = portfolio.items.find((other) => other.id === dragId);
+          const rest = portfolio.items.filter((other) => other.id !== dragId);
+          const target = rest.findIndex((other) => other.id === item.id);
+          rest.splice(before ? target : target + 1, 0, moved);
+          portfolio.items = rest;
+          render();
+          save();
+        });
+
+        return element;
+      }
+
+      function render() {
+        els.count.textContent = `${portfolio.items.length} φωτογραφίες`;
+        els.grid.replaceChildren(...portfolio.items.map(card));
+      }
+
+      async function upload(files) {
+        const images = [...files].filter((file) => file.type.startsWith('image/') || /\.(jpe?g|png|tiff?|webp|heic)$/i.test(file.name));
+        if (!images.length) return;
+        els.add.disabled = true;
+        let done = 0;
+        const failed = [];
+        for (const file of images) {
+          setStatus(`Ανεβαίνει ${done + 1}/${images.length}…`);
+          try {
+            const data = await api(`/api/upload?name=${encodeURIComponent(file.name)}`, { method: 'POST', body: file });
+            portfolio.items.push(data.item);
+          } catch {
+            failed.push(file.name);
+          }
+          done += 1;
+        }
+        els.add.disabled = false;
+        render();
+        await save();
+        if (failed.length) setStatus(`Δεν διαβάστηκαν: ${failed.join(', ')}`, true);
+      }
+
+      els.add.addEventListener('click', () => els.files.click());
+      els.files.addEventListener('change', () => {
+        upload(els.files.files);
+        els.files.value = '';
+      });
+
+      // Files dragged in from Finder (card drags carry no files).
+      const hasFiles = (event) => [...(event.dataTransfer?.types || [])].includes('Files');
+      window.addEventListener('dragover', (event) => {
+        if (!hasFiles(event)) return;
+        event.preventDefault();
+        document.body.classList.add('dropping');
+      });
+      window.addEventListener('dragleave', (event) => {
+        if (!event.relatedTarget) document.body.classList.remove('dropping');
+      });
+      window.addEventListener('drop', (event) => {
+        if (!hasFiles(event)) return;
+        event.preventDefault();
+        document.body.classList.remove('dropping');
+        upload(event.dataTransfer.files);
+      });
+
+      els.views.addEventListener('click', (event) => {
+        const view = event.target.dataset?.view;
+        if (!view) return;
+        document.body.dataset.view = view;
+        els.views.querySelectorAll('button').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.view === view)));
+        if (view === 'preview' && !iframe.src) iframe.src = iframe.dataset.src;
+      });
+
+      els.publish.addEventListener('click', async () => {
+        if (!confirm('Να δημοσιευτούν οι αλλαγές στο lightofcrete.com; Θα είναι ζωντανές σε 1–2 λεπτά.')) return;
+        els.publish.disabled = true;
+        setStatus('Δημοσίευση…');
+        try {
+          clearTimeout(saveTimer);
+          await save();
+          const data = await api('/api/publish', { method: 'POST' });
+          git = data.git;
+          setStatus('Στάλθηκε · ζωντανό σε 1–2 λεπτά');
+        } catch (error) {
+          setStatus(error.message, true);
+          alert(error.message);
+        } finally {
+          els.publish.disabled = false;
+        }
+      });
+
+      const data = await api('/api/portfolio');
+      portfolio = data.portfolio;
+      git = data.git;
+      renderStyles(data.styles);
+      render();
+      setStatus(pendingText());
+    </script>
+  </body>
+</html>

@@ -573,7 +573,13 @@ function Gallery() {
   );
 }
 
+const galleryStyles = ['editorial', 'masonry', 'justified'];
+
 function GalleryPage() {
+  const galleryStyle = galleryStyles.includes(galleryPageContent.style)
+    ? galleryPageContent.style
+    : 'masonry';
+
   return (
     <>
       <section id="top" className="gallery-page-hero">
@@ -612,7 +618,7 @@ function GalleryPage() {
 
       <section className="gallery-page-body px-4 py-20 sm:py-28">
         <div className="section-shell">
-          <div className="gallery-page-masonry">
+          <div className={`gallery-page-${galleryStyle}`}>
             {galleryPageContent.items.map((item, index) => (
               <motion.figure
                 key={item.id}
@@ -622,14 +628,19 @@ function GalleryPage() {
                 viewport={{ once: true, margin: '-70px' }}
                 transition={{ duration: 0.62, delay: (index % 4) * 0.04 }}
                 className="gallery-page-item group"
+                data-shape={item.width > item.height ? 'landscape' : 'portrait'}
+                data-large={item.large ? 'true' : undefined}
+                style={{ '--ratio': item.width && item.height ? item.width / item.height : 1 }}
               >
                 <img
                   src={item.src}
                   alt={item.alt}
+                  width={item.width || undefined}
+                  height={item.height || undefined}
                   loading={index < 6 ? 'eager' : 'lazy'}
                   className="w-full object-cover transition duration-700 group-hover:scale-[1.025]"
                 />
-                <figcaption>{item.label}</figcaption>
+                {item.label ? <figcaption>{item.label}</figcaption> : null}
               </motion.figure>
             ))}
           </div>
