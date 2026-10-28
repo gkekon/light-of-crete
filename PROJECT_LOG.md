@@ -76,6 +76,11 @@ This file is a working log of local project changes and decisions. It is not a d
 - Fixed the admin's per-photo buttons going dead after the first save, and replaced native `confirm()` dialogs (blocked in embedded browsers) with a second click.
 - Added optional category filters on `/gallery` (All / Couples / Family / Maternity / Solo / Groups). Each photo's category and the category list are set in the portfolio admin; only categories with photos show as buttons. `/gallery?category=couples` opens with that filter on. The first category per photo was guessed from its old label and should be reviewed.
 
+## 2026-10-28
+
+- Added two new real 5-star Google reviews (Ni Muenchen, in the original German; Vlad Scobiola), copied from the Google Business Profile on this date. The profile now shows 12 reviews, all 5 stars. Olu Kola-Korolo's review is still not listed there and stays on the site, as before.
+- Refreshed the relative dates of the older reviews to match the profile.
+
 ## Notes
 
 - Do not deploy, push, or change Netlify/GitHub settings unless Konstantinos explicitly asks.

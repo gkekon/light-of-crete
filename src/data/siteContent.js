@@ -386,9 +386,23 @@ export const googleReviewsSection = {
   // filters rating === 5, and returns only: reviewerName, text, relativeDate, rating.
   reviews: [
     {
+      reviewerName: "Ni Muenchen",
+      rating: 5,
+      relativeDate: '4 days ago',
+      text: "Wir sind absolut begeistert von unserem Shooting! Die Fotos sind einfach unfassbar schön geworden und haben unsere Erwartungen sogar übertroffen.\n\nVon Anfang an war alles locker, entspannt und ungezwungen. Es gab keinen Druck und nichts wirkte gestellt – genau das hat das Shooting so besonders gemacht. Besonders toll fanden wir, wie liebevoll und spielerisch mit unserer Tochter interagiert wurde. Dadurch sind wunderschöne, natürliche Aufnahmen entstanden, auf denen sie einfach sie selbst sein konnte.\n\nAuch mein Mann und ich wurden toll in Szene gesetzt. Selbst mein Papa, der eigentlich nicht besonders gerne vor der Kamera steht, wurde wunderbar eingebunden und hat sich sichtlich wohlgefühlt. So sind nicht nur tolle Familienbilder, sondern auch wunderschöne Paar- und Einzelaufnahmen entstanden.\n\nDer Fotograf ist unglaublich nett, freundlich und sympathisch, sodass man sich direkt gut aufgehoben fühlt. Und das Ergebnis? Einfach mega!\n\nAuch das Preis-Leistungs-Verhältnis ist wirklich ausgesprochen gut und absolut fair.\n\nEin rundum gelungenes Shooting für die ganze Familie, das wir jederzeit wieder machen würden! Wer natürliche, authentische und wunderschöne Fotos möchte und dabei eine entspannte Atmosphäre schätzt, ist hier genau richtig. Eine ganz klare Empfehlung von uns!",
+      sourceUrl: 'https://www.google.com/maps/contrib/100955735751568886641/reviews?hl=el-GR',
+    },
+    {
+      reviewerName: "Vlad Scobiola",
+      rating: 5,
+      relativeDate: '4 days ago',
+      text: "Excelent experience. Konstantinos did put time and effort into my solo photoshoot, and came with creative ideas. He was also very generous with the number of photos he delivered. 10/10",
+      sourceUrl: 'https://www.google.com/maps/contrib/103861470802358732358/reviews?hl=el-GR',
+    },
+    {
       reviewerName: "Angelika Giavis",
       rating: 5,
-      relativeDate: '2 weeks ago',
+      relativeDate: '1 month ago',
       text: "Konstantinos was so great! The engagement was a surprise to me and Konstantinos did a great job of staying hidden while still being able to beautifully capture the special moment. We didn’t really have an idea of what different poses we wanted, and he was able to guide us and help give suggestions for different poses and angles. Overall, it was a wonderful experience and I’m so glad we had him to capture this moment!",
       sourceUrl: 'https://www.google.com/maps/contrib/118305347610752296032/reviews?hl=el-GR',
     },
@@ -430,21 +444,21 @@ export const googleReviewsSection = {
     {
       reviewerName: 'Beatrice Cristian',
       rating: 5,
-      relativeDate: '2 months ago',
+      relativeDate: '3 months ago',
       text: "We had the most wonderful family photoshoot in Crete, and we couldn't have asked for a better photographer. From the very beginning, he made us feel completely relaxed and comfortable. He never rushed us and paid incredible attention to every little detail. He knew exactly how to use the beautiful sunset light, and how to capture the most magical moments. What impressed us the most is that these are not just beautiful photos, they are real memories. He captured our genuine emotions, our laughter, our connection as a family, and the little moments that truly represent who we are. Every picture tells a story. The final gallery exceeded all our expectations. The photos are absolutely stunning, and they will always remind us of one of the happiest moments of our vacation in Crete. If you're looking for someone who is talented, patient, passionate, and truly gifted at capturing authentic emotions, we wholeheartedly recommend him. Thank you for giving us memories that we will cherish for a lifetime!",
       sourceUrl: 'https://www.google.com/maps/contrib/104087814288634722905/reviews?hl=el-GR',
     },
     {
       reviewerName: 'Andrea Molnár',
       rating: 5,
-      relativeDate: '2 months ago',
+      relativeDate: '3 months ago',
       text: 'The photoshoot was a great experience: fun, punctual, and efficient. They really connected well with my son too. It was an enjoyable time, and the resulting photos are, of course, wonderful keepsakes.',
       sourceUrl: 'https://www.google.com/maps/contrib/104530345593164920646/reviews?hl=el-GR',
     },
     {
       reviewerName: 'Pillet Baptiste',
       rating: 5,
-      relativeDate: '2 months ago',
+      relativeDate: '3 months ago',
       text: 'A wonderful experience and a beautiful result. Konstantinos quickly made us feel at ease and was courteous and professional throughout. Many thanks to him again!',
       sourceUrl: 'https://www.google.com/maps/contrib/117759701984439410735/reviews?hl=el-GR',
     },
